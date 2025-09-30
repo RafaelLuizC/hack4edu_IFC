@@ -26,6 +26,10 @@ def prompt_geracao_perguntas(input_system):
   {"role": "system", "content": f"""Texto de Referência: {input_system}""" }
 ]
 
+def prompt_correcao_ocr():
+  return [{"role": "system", "content": f"""Corrija o seguinte texto que foi extraído via OCR, possivelmente contendo erros de reconhecimento de caracteres. Ajuste o texto para que fique legível e accurate, corrigindo caracteres especiais, palavras mal interpretadas, e problemas de formatação. Mantenha o conteúdo original tanto quanto possível, mas faça as correções necessárias para melhorar a clareza e precisão. Retorne apenas o texto corrigido, sem comentários adicionais. Texto a ser corrigido:"""}]
+
+
 def prompt_geracao_dados(input_system):
   return [
   {"role": "system", "content": f"""

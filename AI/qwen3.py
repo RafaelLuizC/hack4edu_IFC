@@ -5,7 +5,7 @@ from llama_cpp import Llama
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))) #Serve para importar a pasta raiz.
 
 from util.prompts import *
-from databases.bd_search import busca_vetores
+from processing.pdf import extrair_dados_pdf
 
 dicionario_links = [{"link": "https://www.camboriu.ifc.edu.br/noticias/category/noticias/","pagina_indice": "True","nome_link":"Noticias"},
                      {"link": "https://www.camboriu.ifc.edu.br/editais/","pagina_indice": "True","nome_link":"Editais"},
@@ -67,86 +67,7 @@ def convert_messages_to_qwen3(messages):
 
 def pipeline_qwen(mensagens):
 
-    lista_itens_recuperados = []
-    
-    print("\nETAPA 1: CLASSIFICAÇÃO")
-    nomes_links = format_areas_busca(dicionario_links) #Gera a string com as áreas de busca.
-    prompt = analise_pergunta2(nomes_links)
-
-    print (f"Prompt de Análise: {prompt}")
-    print (type(prompt), type(mensagens))
-
-    prompt_analise = [prompt, usuario]
-
-    texto_json, pensamento = ia_local(prompt_analise) #Gera o conteudo
-
-    #print(f"JSON Recebido do Modelo: {texto_json}")
-
-    acoes, sucesso = trata_json_resposta(texto_json)  # Tenta converter o JSON
-
-    if not sucesso: #Caso não tenha conseguido converter o JSON.        
-        print (f"Ações: {acoes}") #Ações nesse caso é a resposta do modelo.
-        mensagem_erro = {"Erro": "Formato inválido na resposta do assistente (esperava uma lista de ações)","Ação":acoes}
-        #inserir_logs("error_logs",mensagem_erro) #Insere o log de erro, caso não tenha conseguido converter o JSON.
-        
-        return acoes, None
-
-    # Garante que 'acoes' seja um dict (caso venha como lista, pega o primeiro elemento)
-    if isinstance(acoes, list) and len(acoes) > 0:
-        acoes = acoes[0]
-    
-    elif not isinstance(acoes, dict):
-        print(f"Formato inesperado para 'acoes': {acoes}")
-        return "Erro: formato inesperado para ações.", None
-
-    acao = acoes.get("acao")
-
-    if acao == "responder_diretamente":
-        parametros = acoes.get("parametros", {})
-        resposta_direta = parametros.get("texto_resposta", "Desculpe, não tenho uma resposta para isso no momento.")
-        return resposta_direta, None
-
-    if acao == "buscar_informacao":
-        parametros = acoes.get("parametros", {})
-        item = parametros.get("query_de_busca", "")
-        area = parametros.get("area_de_busca", "")
-
-        documentos = busca_vetores({"area": area, "busca": item}, 3)
-
-        if not documentos: #Caso nenhum documento tenha sido encontrado.
-            #inserir_logs("error_logs", {"Erro": "Nenhum documento encontrado", "Ação": item})
-            itens_recuperados_str = "Não foram encontrados itens relacionados à sua consulta."
-
-        else:
-            for doc in documentos: #Para cada documento encontrado:
-                if doc.get('conteudoPagina'): #Get conteúdo da página.
-                                        
-                    #Monta a string que irá para a lista de dados recuperados.
-                    doc_str = f"Título: {doc.get('tituloPagina', 'N/A')}\nConteúdo: {doc.get('conteudoPagina', '')}" 
-                    lista_itens_recuperados.append(doc_str)
-                    print (doc_str)
-
-
-            itens_recuperados_str = "\n\n---\n\n".join(lista_itens_recuperados) #Gera uma string com os itens recuperados. 
-
-        prompt_sintese = prompt_geracao_conteudo_2(str(mensagens),str(mensagens[-1]),itens_recuperados_str) #Gera o prompt de síntese, incluindo os itens recuperados.
-
-        #conteudo = gerar_conteudo_vertex(prompt, mensagens, temperature=0.9) #Gera o conteudo final, baseado na síntese.
-
-        print (type(prompt_sintese), (type(usuario)))
-
-        prompt_sintese = [prompt_sintese, usuario]
-
-        conteudo, pensamento = ia_local(prompt_sintese) #Gera o conteudo final, baseado na síntese.
-
-        print(f"Conteúdo Gerado: {conteudo}")
-
-        return conteudo, None
-
-    if acao == "pedir_esclarecimento":
-        parametros = acoes.get("parametros", {})
-        pedido_esclarecimento = parametros.get("texto_resposta", "Desculpe, não entendi sua pergunta. Poderia esclarecer?")
-        return pedido_esclarecimento, None
+    pass
 
 def ia_local(messages):
 
@@ -164,7 +85,7 @@ def ia_local(messages):
         messages,
         tokenize=False,
         add_generation_prompt=True,
-        enable_thinking=True # Switches between thinking and non-thinking modes. Default is True.
+        enable_thinking=False # Switches between thinking and non-thinking modes. Default is True.
     )
     model_inputs = tokenizer([text], return_tensors="pt").to(model.device)
 
@@ -239,17 +160,21 @@ def ia_local_quant(messages, model_path="modelo\Qwen3-0.6B-UD-Q8_K_XL.gguf"):
 
 if __name__ == "__main__":
 
-    while True:
-        mensagem_usuario = input("Digite sua mensagem: ")
-        start_time = time.time()
+    start_time = time.time()
+    texto_referencia = "pdf_sample/LISTA_1__MEDIDAS_DESCRITIVAS___Estatstica.pdf"
 
-        usuario = ({"role": "user", "content": mensagem_usuario})
-        mensagens = [usuario]
-        resposta, itens_recuperados = pipeline_qwen(mensagens)
+    fatias = extrair_dados_pdf(texto_referencia)
 
-        print (f"\nResposta: {resposta}")
-        end_time = time.time()
-        print(f"Tempo decorrido: {(end_time - start_time) / 60:.2f} minutos")
+    prompt = prompt_correcao_ocr()
+
+    fatias = [{"role": "system", "content": fatias}, prompt]
+
+    resultado = ia_local(texto_referencia)
+
+    print("Resultado Final:")
+    print(resultado)
+    end_time = time.time()
+    print(f"Tempo decorrido: {(end_time - start_time) / 60:.2f} minutos")
 
     #   prompt = analise_perguntas("Cães Guias")
 

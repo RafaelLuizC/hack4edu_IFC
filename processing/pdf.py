@@ -1,8 +1,10 @@
 from PyPDF2 import PdfReader
-import re
+import re, sys, os
 import pymupdf4llm
 
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))) #Serve para importar a pasta raiz.
 from processing.extrator_ppc import gerar_json_fatias
+from util.prompts import *
 
 def remover_cabecalho(conteudos_paginas, n_palavras=10, threshold=0.5):
     inicios_paginas = []
@@ -62,12 +64,25 @@ def extrair_dados_pdf(nome_arquivo):
             md_text.append({"pagina": page_num + 1, "conteudo": page_content}) #Preciso atualizar essa parte.
 
 
-        #conteudos = [item["Conteudo"] for item in md_text] # Cria uma lista com todos os itens "Conteudo".
-        md_text = remover_cabecalho(md_text, n_palavras=10, threshold=0.5) #Remove o cabeçalho do texto.
-        fatias = gerar_json_fatias(md_text,300)
+        conteudos = [item["conteudo"] for item in md_text] # Cria uma lista com todos os itens "Conteudo".
+        # md_text = remover_cabecalho(md_text, n_palavras=10, threshold=0.5) #Remove o cabeçalho do texto.
+        # fatias = gerar_json_fatias(md_text,300)
         
-        return fatias
+        return conteudos
 
+if __name__ == "__main__":
+    nome_arquivo = "pdf_sample/LISTA_1__MEDIDAS_DESCRITIVAS___Estatstica.pdf"
+    fatias = extrair_dados_pdf(nome_arquivo)
+    
+    print (fatias)
+
+    #prompt = prompt_correcao_ocr(fatias[0])
+
+    #print (prompt)
+    
+    # with open("out-pdf.json", "w", encoding="utf-8") as json_file:
+    #     import json
+    #     json.dump(fatias, json_file, ensure_ascii=False, indent=4)
 
 #Função que retorna o arquivo em Markdown, e salva o arquivo em um arquivo JSON.
 #Essa função usa a biblioteca MarkdownTextSplitter, para dividir o texto em partes menores, e depois salva o arquivo em um arquivo JSON.

@@ -1,13 +1,15 @@
-import json, os, dotenv, time
 
-from util.helpers import *
+import json, os, dotenv, time, sys
 #from databases.bd_search import busca_vetores, inserir_logs
-from util.prompts import *
 from google import genai
 from google.genai import types
 import re
 
-from AI.qwen3 import ia_local
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))) #Serve para importar a pasta raiz.
+from util.helpers import *
+from util.prompts import *
+#from AI.qwen3 import ia_local
+from processing.pdf import extrair_dados_pdf
 
 dotenv.load_dotenv()
 id_projeto = str (os.getenv("ID_PROJETO"))
@@ -65,7 +67,7 @@ def gerar_conteudo_vertex(system_instruction_text, contents_list, temperature=1.
 
         generate_content_config = types.GenerateContentConfig(
             temperature=temperature, 
-            max_output_tokens=8192,
+            max_output_tokens=60000,
             system_instruction=[types.Part.from_text(text=system_instruction_text)], #Ok, aqui ele recebe a parte das instruções.
         )
 
@@ -112,38 +114,52 @@ def gerar_conteudo_vertex(system_instruction_text, contents_list, temperature=1.
 
 def formatar_mensagens_para_vertex(mensagens, prompt):
 
-    mensagens_lista = [prompt] + mensagens #Aqui recebe o prompt de classificação + as mensagens?
-    #Essa função recebe uma lista, ela assume que o primeiro item dela são as instruções do sistema.
-    #E as seguintes são as mensagens trocadas entre o usuario e o assistente.
-    #Ou seja, o papel dela é receber uma lista de mensagens e transformar em um texto para chamar a API do Gemini.
-
-    #Segundo oque o Gemini me respondeu, eu vou precisar adicionar o contexto ao RAG.
-
+    mensagens_lista = [prompt] + mensagens
+    # Garante que o primeiro item seja um dicionário com a chave 'content'
     if not mensagens_lista:
         return None, []
 
-    system_instruction = mensagens_lista[0]['content']
+    primeiro = mensagens_lista[0]
+    if isinstance(primeiro, dict) and 'content' in primeiro:
+        system_instruction = primeiro['content']
+    elif isinstance(primeiro, str):
+        system_instruction = primeiro
+    else:
+        system_instruction = str(primeiro)
+
     vertex_contents = []
-    
     # Começa do segundo item, já que o primeiro é a instrução do sistema
     for msg in mensagens_lista[1:]:
-        role = msg.get("role", "user") #Aqui eu estou informando que o papel da mensagem é "user" por padrão.
+        if isinstance(msg, dict):
+            role = msg.get("role", "user")
+            content = str(msg.get("content", ""))
+        else:
+            role = "user"
+            content = str(msg)
 
-        if role.lower() in ["assistant", "system"]: #E que "assistant" ou "system" estão sendo usados.
+        if role.lower() in ["assistant", "system"]:
             role = "model"
-            
+
         vertex_contents.append(
             types.Content(
                 role=role,
-                parts=[types.Part.from_text(text=str(msg.get("content", "")))]
+                parts=[types.Part.from_text(text=content)]
             )
         )
     return system_instruction, vertex_contents
 
 def gerar_perguntas_vertex(texto_referencia):
-    prompt = prompt_geracao_perguntas(texto_referencia)
 
-    system_instruction, vertex_contents = formatar_mensagens_para_vertex(prompt, prompt)
+    fatias = extrair_dados_pdf(texto_referencia)
+
+    fatias = [{"role": "system", "content": fatias}]
+
+    prompt = prompt_correcao_ocr()
+
+    system_instruction, vertex_contents = formatar_mensagens_para_vertex(fatias, prompt)
+
+    print (f"Informações do Sistema: {system_instruction}")
+    print (f"Conteúdos para o Vertex: {vertex_contents}")
 
     if not vertex_contents:
         return "Erro: Nenhuma mensagem válida para processar."
@@ -156,3 +172,12 @@ def gerar_perguntas_vertex(texto_referencia):
     #    return f"Erro ao interpretar a resposta do modelo: {acoes}"
 
     return resposta
+
+
+if __name__ == "__main__":
+
+    texto_referencia = "pdf_sample/LISTA_1__MEDIDAS_DESCRITIVAS___Estatstica.pdf"
+    resultado = gerar_perguntas_vertex(texto_referencia)
+
+    print("Resultado Final:")
+    print(resultado)
