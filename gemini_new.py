@@ -13,7 +13,73 @@ dotenv.load_dotenv()
 project = str (os.getenv("ID_PROJETO"))
 location = str (os.getenv("LOCALIZACAO"))
 
-prompt_ocr = """Corrija o seguinte texto que foi extraído via OCR, possivelmente contendo erros de reconhecimento de caracteres. Ajuste o texto para que fique legível e accurate, corrigindo caracteres especiais, palavras mal interpretadas, e problemas de formatação. Mantenha o conteúdo original tanto quanto possível, mas faça as correções necessárias para melhorar a clareza e precisão. Retorne apenas o texto corrigido, sem comentários adicionais. Texto a ser corrigido:"""
+prompt_ocr = """Você é um assistente especializado em análise de conteúdo educacional e geração de mapas mentais.
+
+Sua tarefa é:
+1. Analisar o texto fornecido pelo usuário, que pode conter resumos, listas de exercícios, tópicos de aula ou anotações de professor.  
+2. Identificar os **principais temas (tópicos)** e seus **subtemas (subtópicos)** com base na estrutura e no conteúdo.  
+3. Eliminar repetições e combinar conteúdos semelhantes.  
+4. Criar **sínteses explicativas curtas e objetivas** sobre o que o aluno deve entender ou fazer para resolver questões relacionadas a cada tema ou subtema.  
+5. Retornar o resultado **exclusivamente** em formato JSON, na seguinte estrutura:  
+
+```json
+[
+  {
+    "Topico": "NOME DO TÓPICO PRINCIPAL",
+    "Conteudo": "Resumo explicativo geral do tópico.",
+    "Subtopicos": [
+      {
+        "Nome": "NOME DO SUBTÓPICO",
+        "Conteudo": "Síntese explicativa ou instrução de aprendizado referente a este subtema."
+      }
+    ]
+  }
+]
+
+Regras Importantes:
+
+O JSON deve conter apenas tópicos e subtemas únicos (sem repetições).
+O campo "Conteudo" deve conter exemplos do professor, de forma clara, direta e útil para estudo ou resolução de exercícios.
+Se um tópico não tiver subdivisões, retorne apenas "Topico" e "Conteudo".
+Se houver subdivisões claras (ex: fórmulas, propriedades, casos, exemplos), insira-as como "Subtopicos".
+Não adicione nenhum texto fora do JSON.
+Preserve a clareza e a coerência lógica da hierarquia.
+Organize ele de forma que facilite o estudo e a revisão dos conteúdos apresentados no texto original.
+"""
+# Exemplo de Saída Esperada:
+
+# Saída JSON:
+# ```json
+# [
+#   {
+#     "Topico": "Medidas Descritivas",
+#     "Conteudo": "Resumem um conjunto de dados por meio de medidas centrais e de dispersão.",
+#     "Subtopicos": [
+#       {"Nome": "Média", "Conteudo": "Soma dos valores dividida pela quantidade de elementos."},
+#       {"Nome": "Mediana", "Conteudo": "Valor central de um conjunto ordenado."},
+#       {"Nome": "Moda", "Conteudo": "Valor que mais se repete nos dados."},
+#       {"Nome": "Variância", "Conteudo": "Mede o grau de dispersão dos dados em relação à média."},
+#       {"Nome": "Desvio Padrão", "Conteudo": "Raiz quadrada da variância, representa a dispersão média."}
+#     ]
+#   },
+#   {
+#     "Topico": "Distribuição de Poisson",
+#     "Conteudo": "Modela a probabilidade de um número de eventos ocorrer em um intervalo fixo.",
+#     "Subtopicos": [
+#       {"Nome": "Taxa de Ocorrência (λ)", "Conteudo": "Número médio de eventos em um intervalo."},
+#       {"Nome": "Cálculo de Probabilidade", "Conteudo": "Usa a fórmula P(x) = (λ^x * e^-λ) / x!."}
+#     ]
+#   },
+#   {
+#     "Topico": "Banco de Dados",
+#     "Conteudo": "Ferramentas de manipulação e execução de consultas SQL.",
+#     "Subtopicos": [
+#       {"Nome": "Views", "Conteudo": "Consultas salvas que se comportam como tabelas virtuais."},
+#       {"Nome": "Stored Procedures", "Conteudo": "Blocos de código SQL armazenados no banco para execução automática."}
+#     ]
+#   }
+# ]
+# """
 
 prompt_perguntas = """Você é um gerador de perguntas e deverá criar uma pergunta de múltipla escolha sobre o texto de referencia enviado. A pergunta deve ter 4 opções de resposta, onde uma delas será a correta. Cada resposta deve ter uma explicação do porquê está errada ou correta.
   Com base no texto enviado, traduza ele para a lingua Portuguesa e conte a historia de maneira ludica para crianças, focando no ensino do conteudo apresentado no material.
@@ -91,7 +157,7 @@ def generate(string, prompt_regras):
 if __name__ == "__main__":
 
     os.makedirs("output", exist_ok=True)
-    correcao_ocr_path = "output/correcao_ocr_lista1.txt"
+    correcao_ocr_path = "output/correcao3_ocr_lista1.json"
     texto_referencia = "pdf_sample/LISTA_1__MEDIDAS_DESCRITIVAS___Estatstica.pdf"
 
     if os.path.exists(correcao_ocr_path):
@@ -116,6 +182,6 @@ if __name__ == "__main__":
     else:
       texto_corrigido = str(texto_corrigido)
 
-    texto_perguntas = generate(texto_corrigido, prompt_perguntas)
+    #texto_perguntas = generate(texto_corrigido, prompt_perguntas)
 
-    print(texto_perguntas)
+    #print(texto_perguntas)

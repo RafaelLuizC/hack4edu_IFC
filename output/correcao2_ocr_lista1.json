@@ -1,0 +1,240 @@
+[
+  {
+    "Topico": "Medidas Descritivas - Efeitos de Transformações em Conjuntos de Dados",
+    "Conteudo": "Entender como operações aritméticas (multiplicação, adição, subtração) aplicadas a cada observação de um conjunto de dados afetam a média, a variância e o desvio padrão.",
+    "Subtopicos": [
+      {
+        "Nome": "Multiplicação de cada observação por uma constante",
+        "Conteudo": "Se cada observação for multiplicada por uma constante 'k', a média também será multiplicada por 'k'. A variância será multiplicada por 'k²' e o desvio padrão será multiplicado pelo valor absoluto de 'k'."
+      },
+      {
+        "Nome": "Adição de uma constante a cada observação",
+        "Conteudo": "Se uma constante for adicionada a cada observação, a média será aumentada por essa constante. A variância e o desvio padrão não se alteram."
+      },
+      {
+        "Nome": "Subtração da média geral de cada observação",
+        "Conteudo": "Quando a média geral é subtraída de cada observação, a variância e o desvio padrão permanecem inalterados. Este processo é a base para a padronização de dados (z-score)."
+      },
+      {
+        "Nome": "Padronização (Z-score)",
+        "Conteudo": "Subtrair a média geral de cada observação e dividir pelo desvio padrão resulta em um conjunto de dados com média 0 e desvio padrão 1. Isso permite comparar dados de diferentes escalas."
+      }
+    ]
+  },
+  {
+    "Topico": "Análise de Distribuições de Frequência e Visualizações Gráficas",
+    "Conteudo": "Interpretar dados apresentados em tabelas de frequência e construir gráficos para visualizar a distribuição, além de calcular quantidades específicas com base nas porcentagens.",
+    "Subtopicos": [
+      {
+        "Nome": "Construção de Gráficos de Barras e Setores",
+        "Conteudo": "Representar graficamente a distribuição de frequências de variáveis categóricas ou discretas. O gráfico de barras utiliza barras verticais para cada categoria, enquanto o gráfico de setores divide um círculo proporcionalmente às frequências de cada categoria."
+      },
+      {
+        "Nome": "Cálculo de Quantidades Absolutas a partir de Porcentagens",
+        "Conteudo": "Para encontrar o número absoluto de elementos em uma categoria, multiplique o total de elementos pela porcentagem (em forma decimal) dessa categoria."
+      },
+      {
+        "Nome": "Cálculo de Ângulos em Gráficos de Setores",
+        "Conteudo": "Para determinar o ângulo de cada setor em um gráfico de setores, multiplique a porcentagem da categoria (em forma decimal) por 360 graus."
+      }
+    ]
+  },
+  {
+    "Topico": "Cálculo de Medidas de Tendência Central e Dispersão",
+    "Conteudo": "Calcular e interpretar a média e a mediana, e identificar a influência de valores discrepantes.",
+    "Subtopicos": [
+      {
+        "Nome": "Média Amostral",
+        "Conteudo": "A média amostral é a soma de todas as observações dividida pelo número de observações. É sensível a valores extremos."
+      },
+      {
+        "Nome": "Mediana Amostral",
+        "Conteudo": "A mediana é o valor central de um conjunto de dados ordenado. Se o número de observações for par, é a média dos dois valores centrais. É menos sensível a valores extremos que a média."
+      },
+      {
+        "Nome": "Identificação de Valores Discrepantes",
+        "Conteudo": "Uma grande diferença entre a média e a mediana em um conjunto de dados geralmente indica a presença de valores discrepantes (outliers) que afetam desproporcionalmente a média."
+      }
+    ]
+  },
+  {
+    "Topico": "Cálculo de Medidas Descritivas para Conjuntos de Dados",
+    "Conteudo": "Determinar diversas medidas estatísticas para descrever um conjunto de dados, incluindo medidas de centralidade, dispersão e posição.",
+    "Subtopicos": [
+      {
+        "Nome": "Tamanho da Amostra (n)",
+        "Conteudo": "O número total de observações em um conjunto de dados."
+      },
+      {
+        "Nome": "Média (x̄)",
+        "Conteudo": "A soma de todas as observações dividida pelo tamanho da amostra."
+      },
+      {
+        "Nome": "Mediana",
+        "Conteudo": "O valor central de um conjunto de dados ordenado. Para um número par de observações, é a média dos dois valores centrais."
+      },
+      {
+        "Nome": "Variância Amostral (s²)",
+        "Conteudo": "A média dos quadrados das diferenças entre cada observação e a média amostral, dividida por (n-1)."
+      },
+      {
+        "Nome": "Desvio Padrão Amostral (s)",
+        "Conteudo": "A raiz quadrada da variância amostral. Mede a dispersão dos dados em relação à média."
+      },
+      {
+        "Nome": "Quartis (Q1, Q3)",
+        "Conteudo": "Q1 (primeiro quartil) é o valor que divide os 25% inferiores dos dados. Q3 (terceiro quartil) é o valor que divide os 75% inferiores dos dados."
+      },
+      {
+        "Nome": "Amplitude",
+        "Conteudo": "A diferença entre o valor máximo e o valor mínimo em um conjunto de dados."
+      },
+      {
+        "Nome": "Desvio Médio (DM)",
+        "Conteudo": "A média das diferenças absolutas entre cada observação e a média."
+      },
+      {
+        "Nome": "Coeficiente de Variação (CV)",
+        "Conteudo": "A razão entre o desvio padrão e a média, expressa como porcentagem. Mede a variabilidade relativa dos dados."
+      },
+      {
+        "Nome": "Mínimo e Máximo",
+        "Conteudo": "Os menores e maiores valores em um conjunto de dados."
+      }
+    ]
+  },
+  {
+    "Topico": "Análise Comparativa de Grupos e Visualização com Boxplots",
+    "Conteudo": "Calcular e comparar medidas descritivas para diferentes grupos e usar boxplots para visualizar e comparar suas distribuições e variabilidade.",
+    "Subtopicos": [
+      {
+        "Nome": "Cálculo de Média e Desvio-Padrão por Grupo",
+        "Conteudo": "Calcular a média e o desvio-padrão separadamente para cada grupo de dados para entender as características centrais e a dispersão de cada grupo."
+      },
+      {
+        "Nome": "Histograma por Grupo",
+        "Conteudo": "Construir histogramas para visualizar a distribuição de frequência dos dados dentro de cada grupo. Isso ajuda a identificar a forma da distribuição, a centralidade e a dispersão."
+      },
+      {
+        "Nome": "Interpretação do Impacto de Variáveis",
+        "Conteudo": "Comentar sobre a aparente influência de uma variável (ex: tabagismo, temperatura) no resultado observado (ex: tempo para dormir, resistência à tensão), considerando as médias e a dispersão dos grupos comparados."
+      },
+      {
+        "Nome": "Comparação com Boxplots",
+        "Conteudo": "Utilizar boxplots para comparar visualmente as distribuições de múltiplos grupos. Os boxplots mostram a mediana, os quartis, a amplitude interquartil e a presença de outliers, facilitando a identificação de diferenças na centralidade, dispersão e simetria."
+      },
+      {
+        "Nome": "Análise de Diferenças entre Sexos ou Condições",
+        "Conteudo": "Comparar as medidas descritivas e boxplots de diferentes grupos (ex: homens vs. mulheres, diferentes temperaturas) para determinar onde as diferenças são mais acentuadas em termos de média, dispersão ou alcance dos valores."
+      },
+      {
+        "Nome": "Avaliação da Variabilidade",
+        "Conteudo": "Analisar se o aumento em uma variável (ex: temperatura) afeta a variabilidade dos dados, observando as amplitudes interquartil e geral nos boxplots ou os desvios padrão calculados."
+      }
+    ]
+  },
+  {
+    "Topico": "Distribuições de Frequência Agrupadas",
+    "Conteudo": "Calcular medidas descritivas a partir de dados agrupados em intervalos de classe, e visualizar a distribuição com histogramas.",
+    "Subtopicos": [
+      {
+        "Nome": "Cálculo de Média em Distribuição de Frequência Agrupada",
+        "Conteudo": "Utilizar o ponto médio de cada classe multiplicado pela sua frequência, somar esses produtos e dividir pelo total de frequências."
+      },
+      {
+        "Nome": "Cálculo da Mediana em Distribuição de Frequência Agrupada",
+        "Conteudo": "Identificar a classe mediana (a classe que contém a [(n/2)-ésima] observação), e aplicar a fórmula apropriada que considera o limite inferior da classe mediana, a frequência acumulada anterior e a amplitude da classe."
+      },
+      {
+        "Nome": "Cálculo da Variância em Distribuição de Frequência Agrupada",
+        "Conteudo": "Utilizar os pontos médios das classes, suas frequências e a média calculada para determinar a variância, geralmente seguindo a fórmula que envolve a soma dos quadrados das diferenças entre os pontos médios e a média, ponderada pelas frequências."
+      },
+      {
+        "Nome": "Construção de Histograma a partir de Dados Agrupados",
+        "Conteudo": "Representar graficamente a distribuição de frequências, onde cada barra representa um intervalo de classe e a altura da barra corresponde à frequência daquela classe."
+      }
+    ]
+  },
+  {
+    "Topico": "Análise de Dados Financeiros e Salariais",
+    "Conteudo": "Interpretar medidas descritivas (média, quartil) no contexto de salários e desempenho financeiro para tomar decisões informadas.",
+    "Subtopicos": [
+      {
+        "Nome": "Interpretação de Quartis em Distribuição de Salários",
+        "Conteudo": "O terceiro quartil (Q3) indica o valor abaixo do qual 25% dos salários se encontram. Portanto, a maioria dos salários estará acima do Q3. Saber o Q3 ajuda a decidir se é mais provável ganhar acima ou abaixo desse valor."
+      },
+      {
+        "Nome": "Avaliação de Companhias com Base em Média e Variância Salarial",
+        "Conteudo": "Uma companhia com uma média salarial alta e variância próxima de zero sugere salários mais homogêneos e próximos da média. Isso pode ser preferível para quem busca estabilidade salarial, comparado a uma empresa com alta variância onde os salários podem ser muito dispersos."
+      }
+    ]
+  },
+  {
+    "Topico": "Análise de Relações entre Variáveis",
+    "Conteudo": "Explorar se existe uma relação entre duas variáveis quantitativas e como essa relação pode ser descrita.",
+    "Subtopicos": [
+      {
+        "Nome": "Gráfico de Dispersão (Scatter Plot)",
+        "Conteudo": "Visualizar a relação entre duas variáveis quantitativas. Cada ponto no gráfico representa um par de observações (x, y). Ajuda a identificar padrões, tendências e a força da relação."
+      },
+      {
+        "Nome": "Identificação e Descrição de Relações",
+        "Conteudo": "Analisar o gráfico de dispersão para determinar se existe uma correlação entre as variáveis. A relação pode ser positiva (ambas aumentam juntas), negativa (uma aumenta enquanto a outra diminui) ou inexistente. A forma da relação (linear, não linear) também pode ser observada."
+      }
+    ]
+  },
+  {
+    "Topico": "Cálculo de Medidas Descritivas e Distribuição de Frequências para Dados Qualitativos",
+    "Conteudo": "Analisar dados que descrevem categorias e calcular frequências relativas para entender a proporção de cada categoria.",
+    "Subtopicos": [
+      {
+        "Nome": "Frequência Relativa",
+        "Conteudo": "A proporção de ocorrências de uma categoria em relação ao total de observações. Calculada dividindo a frequência absoluta da categoria pelo número total de observações."
+      },
+      {
+        "Nome": "Classificação de Variáveis",
+        "Conteudo": "Identificar se uma variável é qualitativa (categórica) ou quantitativa (numérica). Variáveis qualitativas podem ser nominais (sem ordem intrínseca) ou ordinais (com ordem)."
+      },
+      {
+        "Nome": "Cálculo de Medidas Descritivas para Dados Categóricos",
+        "Conteudo": "Para dados categóricos, as medidas descritivas comuns incluem a moda (categoria mais frequente) e a distribuição de frequências relativas."
+      }
+    ]
+  },
+  {
+    "Topico": "Análise de Dados de Produção e Erros",
+    "Conteudo": "Calcular medidas descritivas para dados de produção e analisar a frequência de ocorrências como erros em um processo.",
+    "Subtopicos": [
+      {
+        "Nome": "Cálculo de Média, Mediana e Variância para Dados Contínuos",
+        "Conteudo": "Aplicar as fórmulas padrão para calcular a média, mediana e variância a partir de um conjunto de dados numéricos contínuos."
+      },
+      {
+        "Nome": "Cálculo de Desvio Padrão",
+        "Conteudo": "Obter o desvio padrão a partir da raiz quadrada da variância calculada."
+      },
+      {
+        "Nome": "Representação Gráfica de Distribuições",
+        "Conteudo": "Utilizar gráficos como histogramas ou gráficos de barras para visualizar a distribuição de dados, seja para variáveis contínuas ou discretas."
+      }
+    ]
+  },
+  {
+    "Topico": "Análise de Desempenho e Resultados em Cursos ou Testes",
+    "Conteudo": "Classificar variáveis, construir distribuições de frequência e calcular medidas descritivas para analisar o desempenho em diferentes áreas.",
+    "Subtopicos": [
+      {
+        "Nome": "Classificação de Variáveis em Cursos",
+        "Conteudo": "Identificar se as variáveis são categóricas (ex: Seção) ou numéricas (ex: Notas). Variáveis numéricas podem ser discretas ou contínuas."
+      },
+      {
+        "Nome": "Histograma para Notas",
+        "Conteudo": "Construir um histograma para visualizar a distribuição das notas em uma determinada disciplina, mostrando a frequência de notas em diferentes intervalos."
+      },
+      {
+        "Nome": "Distribuição de Frequência e Gráfico para Variável Categórica",
+        "Conteudo": "Criar uma tabela de frequência (absoluta e relativa) para uma variável categórica (ex: Metodologia) e representar essa distribuição graficamente (ex: gráfico de barras)."
+      }
+    ]
+  }
+]
