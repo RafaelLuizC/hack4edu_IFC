@@ -8,8 +8,7 @@ import re
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))) #Serve para importar a pasta raiz.
 from util.helpers import *
 from util.prompts import *
-#from AI.qwen3 import ia_local
-from processing.pdf import extrair_dados_pdf
+from pdf_parser.pdf import extrair_dados_pdf
 
 dotenv.load_dotenv()
 id_projeto = str (os.getenv("ID_PROJETO"))
@@ -54,7 +53,9 @@ def trata_json_resposta(string_json):
         print(f"Erro ao converter resposta em JSON:\n{string_json}\nDetalhe: {e}")
         return string_json, False
 
-def gerar_conteudo_vertex(system_instruction_text, contents_list, temperature=1.0, project=id_projeto, location=servidor, model="gemini-2.5-flash-lite"):
+def gerar_conteudo_chat(system_instruction_text, contents_list, temperature=1.0, project=id_projeto, location=servidor, model="gemini-2.5-flash-lite"):
+
+    #Função otimizada para chat multiturno com o Vertex AI Gemini.
 
     start_time = time.time()
 
@@ -154,7 +155,7 @@ def gerar_perguntas_vertex(texto_referencia):
 
     fatias = [{"role": "system", "content": fatias}]
 
-    prompt = prompt_correcao_ocr()
+    prompt = prompt_correcao_ocr() # Prompt para correção de OCR.
 
     system_instruction, vertex_contents = formatar_mensagens_para_vertex(fatias, prompt)
 
@@ -164,7 +165,7 @@ def gerar_perguntas_vertex(texto_referencia):
     if not vertex_contents:
         return "Erro: Nenhuma mensagem válida para processar."
 
-    resposta = gerar_conteudo_vertex(system_instruction, vertex_contents, temperature=0.7, model="gemini-2.5-flash-lite")
+    resposta = gerar_conteudo_chat(system_instruction, vertex_contents, temperature=0.7, model="gemini-2.5-flash-lite")
 
     #acoes, sucesso = trata_json_resposta(resposta)
 
@@ -172,12 +173,3 @@ def gerar_perguntas_vertex(texto_referencia):
     #    return f"Erro ao interpretar a resposta do modelo: {acoes}"
 
     return resposta
-
-
-if __name__ == "__main__":
-
-    texto_referencia = "pdf_sample/LISTA_1__MEDIDAS_DESCRITIVAS___Estatstica.pdf"
-    resultado = gerar_perguntas_vertex(texto_referencia)
-
-    print("Resultado Final:")
-    print(resultado)

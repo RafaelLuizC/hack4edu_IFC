@@ -5,7 +5,7 @@ import pytesseract
 from pdf2image import convert_from_path
 from pytesseract import image_to_string
 from PyPDF2 import PdfReader
-from processing.extrator_ppc import gerar_json_fatias
+from pdf_parser.extrator_ppc import gerar_json_fatias
 
 def extrair_dados_ocr(caminho_pdf):
     

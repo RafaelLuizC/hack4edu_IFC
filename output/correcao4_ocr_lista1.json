@@ -1,0 +1,168 @@
+[
+  {
+    "Topico": "Propriedades das Medidas Descritivas em Transformações de Dados",
+    "Conteudo": "Entender como a média, variância e desvio padrão se comportam quando os dados são submetidos a operações aritméticas.",
+    "Subtopicos": [
+      {
+        "Nome": "Multiplicação por uma Constante",
+        "Conteudo": "Quando cada observação é multiplicada por uma constante (k), a média é multiplicada por k, a variância é multiplicada por k², e o desvio padrão é multiplicado pelo valor absoluto de k."
+      },
+      {
+        "Nome": "Adição de uma Constante",
+        "Conteudo": "Quando uma constante (k) é somada a cada observação, a média aumenta em k. A variância e o desvio padrão não se alteram."
+      },
+      {
+        "Nome": "Subtração da Média Geral",
+        "Conteudo": "Ao subtrair a média geral de cada observação (centralização dos dados), a média resultante é zero. A variância e o desvio padrão permanecem inalterados."
+      },
+      {
+        "Nome": "Padronização (Z-score)",
+        "Conteudo": "Ao subtrair a média geral e dividir pelo desvio padrão de cada observação (padronização ou cálculo de Z-score), a média resultante é zero e a variância e o desvio padrão são iguais a 1. Esta operação transforma os dados em escores padronizados."
+      }
+    ]
+  },
+  {
+    "Topico": "Análise de Distribuição de Frequência e Gráficos",
+    "Conteudo": "Interpretação de dados apresentados em tabelas de frequência e sua representação gráfica.",
+    "Subtopicos": [
+      {
+        "Nome": "Construção de Gráficos",
+        "Conteudo": "Construir gráficos de barras e de setores a partir de tabelas de distribuição de frequência para visualizar a proporção de cada categoria. Para o gráfico de setores, o ângulo de cada setor é proporcional à frequência relativa da categoria (ângulo = frequência relativa * 360°)."
+      },
+      {
+        "Nome": "Cálculo de Quantidades Absolutas",
+        "Conteudo": "Calcular o número de elementos em uma categoria multiplicando a frequência relativa (porcentagem) pelo total de elementos na amostra ou população (ex: 8% de 200 funcionários = 0.08 * 200 = 16)."
+      }
+    ]
+  },
+  {
+    "Topico": "Cálculo e Interpretação de Medidas Descritivas",
+    "Conteudo": "Aplicar fórmulas para encontrar as principais medidas estatísticas e interpretar seus resultados.",
+    "Subtopicos": [
+      {
+        "Nome": "Média Amostral",
+        "Conteudo": "Soma de todos os valores da amostra dividida pelo número de observações (n). Usar a fórmula: \\(\\bar{x} = \\frac{\\sum x_i}{n}\\)."
+      },
+      {
+        "Nome": "Mediana Amostral",
+        "Conteudo": "O valor central em um conjunto de dados ordenado. Se o número de observações (n) for ímpar, a mediana é o valor do meio. Se n for par, a mediana é a média dos dois valores centrais. A mediana é menos sensível a valores discrepantes que a média."
+      },
+      {
+        "Nome": "Variância Amostral (s²)",
+        "Conteudo": "Mede a dispersão dos dados em torno da média. Calcular usando a fórmula: \\(s^2 = \\frac{\\sum (x_i - \\bar{x})^2}{n-1}\\)."
+      },
+      {
+        "Nome": "Desvio Padrão Amostral (s)",
+        "Conteudo": "A raiz quadrada da variância amostral. Representa a dispersão típica dos dados em relação à média. Calcular usando: \\(s = \\sqrt{s^2}\\)."
+      },
+      {
+        "Nome": "Quartis (Q1, Q3)",
+        "Conteudo": "Q1 (primeiro quartil) é o valor que separa os 25% menores dados. Q3 (terceiro quartil) é o valor que separa os 75% menores dados (ou 25% maiores). Entre Q1 e Q3 está 50% dos dados. O intervalo interquartil (IIQ) é Q3 - Q1."
+      },
+      {
+        "Nome": "Mínimo e Máximo",
+        "Conteudo": "Os menores e maiores valores observados em um conjunto de dados. Úteis para definir a amplitude total."
+      },
+      {
+        "Nome": "Amplitude",
+        "Conteudo": "Diferença entre o valor máximo e o valor mínimo de um conjunto de dados (Amplitude = Máximo - Mínimo). Mede a extensão total dos dados."
+      },
+      {
+        "Nome": "Desvio Médio Absoluto (d_m)",
+        "Conteudo": "A média dos valores absolutos das diferenças entre cada observação e a média ( \\(d_m = \\frac{\\sum |x_i - \\bar{x}|}{n}\\) ). É outra medida de dispersão."
+      },
+      {
+        "Nome": "Coeficiente de Variação (CV)",
+        "Conteudo": "Relação entre o desvio padrão e a média (\\(CV = \\frac{s}{\\bar{x}}\\)), geralmente expresso em porcentagem. É útil para comparar a variabilidade de conjuntos de dados com médias diferentes."
+      },
+      {
+        "Nome": "Identificação de Discrepantes",
+        "Conteudo": "Comparar a média e a mediana. Uma grande diferença entre elas sugere a presença de valores discrepantes (outliers) que afetam a média. O valor 175 na amostra (123, 116, 122, 110, 175, 126, 125, 111, 118, 117) é um exemplo de discrepante."
+      }
+    ]
+  },
+  {
+    "Topico": "Distribuição de Frequência e Histograma",
+    "Conteudo": "Organizar dados em intervalos e representá-los graficamente para visualizar a forma da distribuição.",
+    "Subtopicos": [
+      {
+        "Nome": "Construção de Distribuição de Frequência",
+        "Conteudo": "Dividir o range dos dados em intervalos de classe (faixas de valores) e contar quantas observações caem em cada intervalo. Frequência relativa (f/n) e frequência percentual (f/n * 100%) são calculadas para cada classe."
+      },
+      {
+        "Nome": "Cálculo de Medidas a Partir de Dados Agrupados",
+        "Conteudo": "Para calcular a média, variância e desvio padrão de dados agrupados, utiliza-se o ponto médio (xi) de cada classe e sua frequência (fi). Média: \\(\\bar{x} = \\frac{\\sum x_i f_i}{n}\\). Variância: \\(s^2 = \\frac{\\sum (x_i - \\bar{x})^2 f_i}{n-1}\\). Mediana: Encontrar a classe mediana e aplicar a fórmula apropriada."
+      },
+      {
+        "Nome": "Construção de Histograma",
+        "Conteudo": "Gráfico de barras onde cada barra representa um intervalo de classe. A altura da barra é proporcional à frequência (ou frequência relativa) da classe. As barras são contíguas para indicar a continuidade dos dados."
+      }
+    ]
+  },
+  {
+    "Topico": "Análise Comparativa de Dados",
+    "Conteudo": "Utilizar medidas descritivas e gráficos para comparar diferentes grupos ou condições.",
+    "Subtopicos": [
+      {
+        "Nome": "Comparação de Médias e Desvios Padrão",
+        "Conteudo": "Comparar as médias de diferentes grupos para ver qual tem, em média, valores maiores. Comparar os desvios padrão para avaliar qual grupo tem maior variabilidade."
+      },
+      {
+        "Nome": "Boxplots (Gráficos de Caixas)",
+        "Conteudo": "Visualizar a distribuição de dados através de quartis, mediana, mínimo e máximo. Permite comparar a dispersão, simetria e presença de outliers entre diferentes grupos. Uma maior diferença entre as 'caixas' de dois grupos em um gráfico boxplot indica uma maior diferença entre eles."
+      },
+      {
+        "Nome": "Análise de Relação entre Variáveis",
+        "Conteudo": "Construir gráficos de dispersão para visualizar a relação entre duas variáveis quantitativas. Analisar a tendência (positiva, negativa, ausente) e a força da relação. Pode-se usar correlação e regressão para quantificar essa relação."
+      }
+    ]
+  },
+  {
+    "Topico": "Interpretação de Medidas de Posição",
+    "Conteudo": "Compreender o significado de percentis e quartis para descrever a posição de um valor dentro de uma distribuição.",
+    "Subtopicos": [
+      {
+        "Nome": "Interpretação de Quartis",
+        "Conteudo": "O terceiro quartil (Q3) indica que 75% dos dados são menores que esse valor. Se o salário médio é R$ 10.000,00 e o Q3 é R$ 5.000,00, então é mais provável ganhar menos de R$ 5.000,00 do que mais."
+      }
+    ]
+  },
+  {
+    "Topico": "Medidas Descritivas para Dados Categóricos",
+    "Conteudo": "Analisar e apresentar dados que não são numéricos.",
+    "Subtopicos": [
+      {
+        "Nome": "Frequências Relativas e Absolutas",
+        "Conteudo": "Calcular e apresentar a proporção (frequência relativa) ou contagem (frequência absoluta) de cada categoria. Útil para variáveis como 'Seção' ou 'Tipo de Solo'."
+      },
+      {
+        "Nome": "Representações Gráficas Categóricas",
+        "Conteudo": "Utilizar gráficos de barras ou setores para visualizar a distribuição de dados categóricos."
+      }
+    ]
+  },
+  {
+    "Topico": "Modelos de Probabilidade (implícito em alguns exercícios)",
+    "Conteudo": "Embora não explicitamente abordado em todos os exercícios, a base para muitas análises estatísticas é a compreensão de distribuições de probabilidade.",
+    "Subtopicos": [
+      {
+        "Nome": "Distribuição de Frequência Relativa",
+        "Conteudo": "Apresentar a proporção de ocorrência de cada categoria ou intervalo. A soma de todas as frequências relativas deve ser 1 (ou 100%)."
+      }
+    ]
+  },
+  {
+    "Topico": "Tipos de Variáveis",
+    "Conteudo": "Classificar variáveis para escolher as análises estatísticas adequadas.",
+    "Subtopicos": [
+      {
+        "Nome": "Variáveis Quantitativas",
+        "Conteudo": "Variáveis que podem ser medidas numericamente (ex: tempo, altura, notas, salários). Permitem cálculos de média, mediana, variância, etc."
+      },
+      {
+        "Nome": "Variáveis Qualitativas (Categóricas)",
+        "Conteudo": "Variáveis que descrevem qualidades ou categorias (ex: Seção de um funcionário, Tipo de Solo). Analisadas através de frequências e proporções."
+      }
+    ]
+  }
+]

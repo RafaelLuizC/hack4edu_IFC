@@ -1,20 +1,9 @@
 from transformers import AutoModelForCausalLM, AutoTokenizer
 import time, json, re, sys, os
 from llama_cpp import Llama
-
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))) #Serve para importar a pasta raiz.
-
 from util.prompts import *
-from processing.pdf import extrair_dados_pdf
 
-dicionario_links = [{"link": "https://www.camboriu.ifc.edu.br/noticias/category/noticias/","pagina_indice": "True","nome_link":"Noticias"},
-                     {"link": "https://www.camboriu.ifc.edu.br/editais/","pagina_indice": "True","nome_link":"Editais"},
-                     {"link": "https://www.camboriu.ifc.edu.br/cursos-tecnicos/integrado-ao-ensino-medio/informatica/","pagina_indice": "False","nome_link":"Curso_Informatica"},
-                     {"link": "https://www.camboriu.ifc.edu.br/pos-graduacao/pos-graduacao-em-educacao/","pagina_indice": "False","nome_link":"Pós-graduação em Educação"},
-                     {"link": "https://www.camboriu.ifc.edu.br/pos-graduacao/pos-graduacao-em-gestao-e-negocios/","pagina_indice": "False","nome_link":"Pós-Graduação em Gestão e Negócios"},
-                     {"link": "https://www.camboriu.ifc.edu.br/bacharelado-em-agronomia-2/","pagina_indice": "False","nome_link":"Bacharelado em Agronomia"},
-                     {"link": "https://www.camboriu.ifc.edu.br/cursos-superiores/bacharelado-em-sistemas-de-informacao/","pagina_indice": "False","nome_link":"Bacharelado em Sistemas de Informação"},
-                     {"link": "https://www.camboriu.ifc.edu.br/cursos-superiores/licenciatura-em-matematica/","pagina_indice": "False","nome_link":"Licenciatura em Matemática"}]
 
 def trata_json_resposta(string_json):
 
@@ -46,15 +35,6 @@ def trata_json_resposta(string_json):
         print(f"Erro ao converter resposta em JSON:\n{string_json}\nDetalhe: {e}")
         return string_json, False
 
-
-def format_areas_busca(areas_busca):
-    result = []
-    for item in areas_busca:
-        nome = item["nome_link"]
-        tipo = "Curso" if item["pagina_indice"] == "False" else item["nome_link"]
-        result.append(f"- **Nome da Área:**{nome}**, **Tipo:** {tipo}")
-    return "\n".join(result)
-
 def convert_messages_to_qwen3(messages):
     template = ""
     role_map = {"system": "system", "user": "user", "assistant": "assistant"}
@@ -66,14 +46,14 @@ def convert_messages_to_qwen3(messages):
     return template
 
 def pipeline_qwen(mensagens):
-
     pass
 
 def ia_local(messages):
 
-    #Carrega o Tokenizer e o modelo.
     model_name = "Qwen/Qwen3-0.6B"
-    #model_name = "Qwen/Qwen3-8B"
+    #model_name = "Qwen/Qwen3-8B" # Modelo maior, mas requer mais memória.
+    
+    # Carrega o Tokenizer e o modelo.
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     model = AutoModelForCausalLM.from_pretrained(
         model_name,
@@ -108,8 +88,13 @@ def ia_local(messages):
 
     return content, thinking_content
 
+
+
 def ia_local_quant(messages, model_path="modelo\Qwen3-0.6B-UD-Q8_K_XL.gguf"):
+    
     # Carrega o modelo GGUF
+    # Carrega uma versão Quantizada do modelo, necessita de menos memoria e roda no CPU, porem com performance inferior.
+    
     llm = Llama(
         model_path=model_path,
         n_ctx=40960,           # Contexto grande para pensar
@@ -158,6 +143,8 @@ def ia_local_quant(messages, model_path="modelo\Qwen3-0.6B-UD-Q8_K_XL.gguf"):
 
     return content, thinking_content
 
+
+# Deveria ser o Pipeline.
 if __name__ == "__main__":
 
     start_time = time.time()

@@ -1,12 +1,11 @@
 import json
 import requests
-from bs4 import BeautifulSoup
 from PyPDF2 import PdfReader
 import re
 import os
 
-from processing.pdf import extrair_dados_pdf
-from processing.ocr import extrair_dados_ocr
+from pdf_parser.pdf import extrair_dados_pdf
+from pdf_parser.ocr import extrair_dados_ocr
 
 #Esse codigo recebe um arquivo Json, que contem links para PDFs, e baixa o conteudo de cada PDF, e salva em um novo Json com os dados do PDF dentro dele.
 
@@ -100,72 +99,3 @@ def processar_arquivo(link):
     except requests.RequestException as e:
         print(f"Erro ao baixar o PDF: {e}")
         return None
-
-if __name__ == '__main__':
-
-    lista_fatias = processar_arquivo("http://www.camboriu.ifc.edu.br/editais/wp-content/uploads/sites/15/2025/04/Edital_25_de_2025_-_Professor_Conteudista_Vagas_No_Preenchidas.pdf") #Essa função vai baixar o arquivo, e depois fazer a leitura do conteudo dele.
-
-    for item in lista_fatias:
-       print (f'Conteudo da Fatia:{item}\n')
-
-    #print (lista_fatias)
-
-    with open("out-malalalalal.md", "r", encoding="utf-8") as output: #Só pra quebrar o programa.
-        pass
-    #Ok, precisamos começar a organizar esse sistema, esta bem bagunçado.
-    #Para isso, vou separar esse documento em diversas funções, a primeira, terá o objetivo de determinar qual é a extensão do arquivo.
-
-    #O Objetivo é que ele faça isso a partir do Banco de Dados, mas, irei utilizar o arquivo JSON por enquanto.
-
-    #Com base no arquivo data, eu vou criar um novo Json, que irá conter as mesmas informações do arquivo data
-    #Mas com a adição de cada PDF conter tambem, o seu conteudo em texto.
-    # Caminho para a pasta contendo os arquivos JSON
-
-    # Lista todos os arquivos JSON na pasta
-    # json_files = [os.path.join('json_novos', f) for f in os.listdir('json_novos') if f.endswith(".json")]
-
-    # # Carrega todos os arquivos JSON em uma lista
-    # data = []
-    # for json_file in json_files:
-    #     with open(json_file, encoding='utf-8') as f:
-    #         data = json.load(f)
-
-    #     lista_arquivos = []
-
-    #     for i in data:
-    #         for item in i.get("links", []):
-    #             link = item.get("href", "") #Usando GET para evitar erro caso o "href" e "links" não exista.
-
-    #             #Lista de extensões validas:
-    #             extensao = verifica_extensao(link)                
-
-    #             if extensao in lista_extensoes:
-    #                 processar_arquivo(link,extensao)
-
-
-    #     with open('data2_modified.json', 'w', encoding='utf-8') as f:
-    #         json.dump(data, f, ensure_ascii=False, indent=4)
-            
-    #     pass
-
-#A Parte abaixo serve para encontrar os nomes e numeros dos editais, mas ainda estou trabalhando nisso.
-# contador = 0
-# not_found_count = 0
-
-# for item in data:
-#     contador += 1
-#     conteudo = item["conteudo"]
-#     found = False
-#     for symbol in ["º", "°", "N°", "No", "Nº"]:
-#         if symbol in conteudo:
-#             index = conteudo.index(symbol)
-#             start = max(0, index - 10)
-#             end = min(len(conteudo), index + len(symbol) + 10)
-#             print(conteudo[start:end])
-#             found = True
-#             break
-#     if not found:
-#         print("Não encontrado")
-#         not_found_count += 1
-
-# print(f"Total de não encontrados: {not_found_count}")

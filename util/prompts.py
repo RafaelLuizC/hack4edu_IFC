@@ -1,99 +1,165 @@
-# Descrição, esse arquivo contem outros prompts utilizados no projeto.
+# Prompt do Parser, ele analisa, corrige e organiza o texto extraído do PDF em tópicos e sub-tópicos.
+def prompt_parser():
+  return """Sua tarefa é:
+  1. Analisar o texto fornecido pelo usuário, que pode conter resumos, listas de exercícios, tópicos de aula ou anotações de professor.  
+  2. Identificar os **principais temas (tópicos)** e seus **subtemas (subtópicos)** com base na estrutura e no conteúdo.  
+  3. Eliminar repetições e combinar conteúdos semelhantes.  
+  4. Criar **sínteses explicativas curtas e objetivas** sobre o que o aluno deve entender ou fazer para resolver questões relacionadas a cada tema ou subtema.  
+  5. Retornar o resultado **exclusivamente** em formato JSON, na seguinte estrutura:  
 
-#O Prompt ainda não esta completo, deverão ser adicionadas novas funções a ele, como por exemplo o tipo de Material que deverá ser gerado, tambem deverá ser adicionado o tipo de atividade.
-def prompt_geracao_perguntas(input_system):
-  return [
-  {"role": "system", "content": f"""
-  Você é um gerador de perguntas e deverá criar uma pergunta de múltipla escolha sobre o texto de referencia enviado. A pergunta deve ter 4 opções de resposta, onde uma delas será a correta. Cada resposta deve ter uma explicação do porquê está errada ou correta.
-  Com base no texto enviado, traduza ele para a lingua Portuguesa e conte a historia de maneira ludica para crianças, focando no aprendizado da materia de lingua inglesa.
-  Passos: Leia a historia e compreenda o contexto.
-  Analise ela e crie uma pergunta de múltipla escolha com base no texto. 
-  Regras: Escreva somente utilizando texto corrido, não utilize topicos.
-  Utilze uma linguagem simples e de facil compreensão.
-  Analise o texto e corrija eventuais erros de gramatica.
-  Utilize o texto para aprendizado de Ingles, inclua exemplos de como as palavras são em portugues e ingles dentro da historia, sem modificar a estrutura dela.
-  Use a historia para ensinar Ingles!
-    {{
-      "Pergunta": "Texto da pergunta",
-      "Resposta1": "Texto da resposta1 (explicação do erro)",
-      "Resposta2": "Texto da resposta2 (explicação do erro)",
-      "Resposta3": "Texto da resposta3 (explicação do erro)",
-      "Resposta4": "Texto da resposta correta (correta)"
-    }}
-  - Apenas uma resposta deve ser marcada como correta e acompanhada da explicação.
-  - As demais respostas devem incluir uma explicação do erro cometido.
-  """},
-  {"role": "system", "content": f"""Texto de Referência: {input_system}""" }
-]
+  ```json
+  [
+    {
+      "Topico": "NOME DO TÓPICO PRINCIPAL",
+      "Conteudo": "Resumo explicativo geral do tópico.",
+      "Subtopicos": [
+        {
+          "Nome": "NOME DO SUBTÓPICO",
+          "Conteudo": "Síntese explicativa ou instrução de aprendizado referente a este subtema."
+        }
+      ]
+    }
+  ]
 
-def prompt_correcao_ocr():
-  return [{"role": "system", "content": f"""Corrija o seguinte texto que foi extraído via OCR, possivelmente contendo erros de reconhecimento de caracteres. Ajuste o texto para que fique legível e accurate, corrigindo caracteres especiais, palavras mal interpretadas, e problemas de formatação. Mantenha o conteúdo original tanto quanto possível, mas faça as correções necessárias para melhorar a clareza e precisão. Retorne apenas o texto corrigido, sem comentários adicionais. Texto a ser corrigido:"""}]
+  Regras Importantes:
 
+  O JSON deve conter apenas tópicos e subtemas únicos (sem repetições).
+  O campo "Conteudo" deve conter exemplos do professor, de forma clara, direta e útil para estudo ou resolução de exercícios.
+  Se um tópico não tiver subdivisões, retorne apenas "Topico" e "Conteudo".
+  Se houver subdivisões claras (ex: fórmulas, propriedades, casos, exemplos), insira-as como "Subtopicos".
+  Não adicione nenhum texto fora do JSON.
+  Preserve a clareza e a coerência lógica da hierarquia.
+  Organize ele de forma que facilite o estudo e a revisão dos conteúdos apresentados no texto original.
 
-def prompt_geracao_dados(input_system):
-  return [
-  {"role": "system", "content": f"""
-Você é um assistente educacional que cria experiências de aprendizado personalizadas.  
-Com base no perfil do usuário e no conteúdo fornecido, sua tarefa é:  
-1. Analisar o conteúdo base.  
-2. Identificar os conceitos essenciais necessários para compreender e resolver atividades relacionadas.  
-3. Gerar um plano de ensino adaptado ao usuário em três etapas: mapa mental, história explicativa e quiz.
+  Exemplo de Saída Esperada:
 
-### Perfil do Usuário:
-Sou [NOME], tenho [IDADE] anos e estou querendo aprender a respeito de [TEMA].  
-Meu objetivo de aprendizado é: [OBJETIVO – ex: reforço escolar, vestibular, concurso, hobby].  
-Meu estilo preferido de aprendizado é: [se houver – ex: visual, narrativo, prático].  
+  Saída JSON:
+  ```json
+  [
+    {
+      "Topico": "Medidas Descritivas",
+      "Conteudo": "Resumem um conjunto de dados por meio de medidas centrais e de dispersão.",
+      "Subtopicos": [
+        {"Nome": "Média", "Conteudo": "Soma dos valores dividida pela quantidade de elementos."},
+        {"Nome": "Mediana", "Conteudo": "Valor central de um conjunto ordenado."},
+        {"Nome": "Moda", "Conteudo": "Valor que mais se repete nos dados."},
+        {"Nome": "Variância", "Conteudo": "Mede o grau de dispersão dos dados em relação à média."},
+        {"Nome": "Desvio Padrão", "Conteudo": "Raiz quadrada da variância, representa a dispersão média."}
+      ]
+    },
+    {
+      "Topico": "Distribuição de Poisson",
+      "Conteudo": "Modela a probabilidade de um número de eventos ocorrer em um intervalo fixo.",
+      "Subtopicos": [
+        {"Nome": "Taxa de Ocorrência (λ)", "Conteudo": "Número médio de eventos em um intervalo."},
+        {"Nome": "Cálculo de Probabilidade", "Conteudo": "Usa a fórmula P(x) = (λ^x * e^-λ) / x!."}
+      ]
+    },
+    {
+      "Topico": "Banco de Dados",
+      "Conteudo": "Ferramentas de manipulação e execução de consultas SQL.",
+      "Subtopicos": [
+        {"Nome": "Views", "Conteudo": "Consultas salvas que se comportam como tabelas virtuais."},
+        {"Nome": "Stored Procedures", "Conteudo": "Blocos de código SQL armazenados no banco para execução automática."}
+      ]
+    }
+]"""
 
-### Conteúdo Base:
-[COLE AQUI o texto, exercício, resumo de aula ou outro material de referência].  
+# Prompt para gerar as atividades detalhadas a partir da trilha criada
+def prompt_atividades():
+  return """ Sua tarefa é gerar o conteúdo detalhado de cada atividade a partir da TRILHA fornecida em JSON.
 
----
+### Instruções:
+1. Para cada item da trilha, identifique o tipo de atividade (Quiz, Flashcard, Audio ou CacaPalavras).
+2. Gere os dados completos da atividade, preenchendo o campo “Detalhes” conforme o tipo.
+3. Retorne o resultado **somente em formato JSON**, seguindo a estrutura abaixo.
 
-### INSTRUÇÕES DE RACIOCÍNIO E GERAÇÃO:
-1. **MAPA MENTAL**  
-   - Extraia os conceitos principais do conteúdo base.  
-   - Organize em tópicos e subtópicos, mostrando como os conceitos se conectam.  
-   - Indique os próximos passos de aprendizado.  
-   - **Não copie** o conteúdo base, apenas utilize-o para entender o que é necessário aprender.  
-
-2. **HISTÓRIA/ANALOGIA**  
-   - Crie uma história curta ou analogia que explique os conceitos do **início do mapa mental**.  
-   - A história deve estar alinhada ao perfil do usuário (idade, objetivo, estilo de aprendizado).  
-   - O objetivo é facilitar a compreensão intuitiva.  
-
-3. **QUIZ**  
-   - Crie um quiz baseado **nos conceitos do mapa mental**.  
-   - Cada pergunta deve estar relacionada a um **tópico ou subtópico do mapa mental**.  
-   - Estruture cada pergunta em JSON no formato:  
-
-{
-"Pergunta": "Texto da pergunta",
-"Resposta1": "Texto da resposta 1 (explicação do erro)",
-"Resposta2": "Texto da resposta 2 (explicação do erro)",
-"Resposta3": "Texto da resposta 3 (explicação do erro)",
-"Resposta4": "Texto da resposta correta (correta)"
-}
-
-
-MAPA_MENTAL:
-[conteúdo do mapa mental em texto estruturado]
-
-HISTORIA:
-[história gerada]
-
-QUIZ:
+### Estrutura de Saída Final:
 [
   {
-    "Pergunta": "...",
-    "Resposta1": "...",
-    "Resposta2": "...",
-    "Resposta3": "...",
-    "Resposta4": "..."
-  },
-  {
-    "Pergunta": "...",
-    ...
+    "Codigo": "Mesmo código da trilha original (ex: DB001)",
+    "Topico": "Tema principal",
+    "Subtopico": "Conceito abordado",
+    "Atividade": "Flashcard | Quiz | Audio | CacaPalavras",
+    "Conteudo": "Resumo breve do conceito trabalhado",
+    "Detalhes": {
+      "Flashcard": {
+        "Frente": "Pergunta ou conceito para memorizar",
+        "Verso": "Resposta ou explicação resumida"
+      },
+      "Quiz": {
+        "Pergunta": "Pergunta clara e direta sobre o tema",
+        "Alternativas": [
+          {"Texto": "Alternativa correta", "Correta": true, "Explicacao": "Justificativa do porquê está correta"},
+          {"Texto": "Alternativa incorreta 1", "Correta": false, "Explicacao": "Motivo do erro"},
+          {"Texto": "Alternativa incorreta 2", "Correta": false, "Explicacao": "Motivo do erro"},
+          {"Texto": "Alternativa incorreta 3", "Correta": false, "Explicacao": "Motivo do erro"}
+        ]
+      },
+      "Audio": {
+        "Titulo": "Tema central da conversa",
+        "Dialogo": [
+          {"Personagem": "Ana", "Fala": "Fala introdutória ou explicação didática"},
+          {"Personagem": "Carlos", "Fala": "Pergunta, dúvida ou exemplo prático"},
+          {"Personagem": "Ana", "Fala": "Resposta complementar ou conclusão da ideia"}
+        ]
+      },
+      "CacaPalavras": {
+        "Tema": "Assunto central",
+        "Palavras": ["Palavra1", "Palavra2", "Palavra3", "Palavra4"]
+      }
+    }
   }
-]"""},
-  {"role": "system", "content": f"""Texto de Referência: {input_system}""" }
 ]
+
+### Regras:
+- Mantenha consistência entre os “Códigos” e tópicos da trilha original.
+- Cada atividade deve conter apenas o tipo correspondente em “Detalhes”.
+- As perguntas e explicações devem ser curtas, claras e com tom pedagógico.
+- Nos diálogos, use linguagem natural e educativa, como se fosse uma conversa leve.
+- Retorne **somente o JSON**, sem explicações adicionais.
+
+Agora gere as atividades detalhadas para a seguinte trilha:
+"""
+
+# Prompt de criação da trilha de aprendizado
+# Ele define quais atividades que o usuário irá receber.
+
+def prompt_trilha():
+  return """Sua tarefa é criar uma TRILHA DE APRENDIZADO adaptada ao perfil do usuário e ao tema solicitado.
+
+### Objetivo:
+Gerar uma sequência de aproximadamente 10 atividades diversificadas (quiz, flashcard, áudio e caça-palavras) que abordem progressivamente os principais tópicos e subtemas do conteúdo informado.
+
+### Instruções:
+1. Leia atentamente o PERFIL DO USUÁRIO e o TEMA fornecido.
+2. Escolha os tópicos e subtemas relevantes ao tema, evitando repetições.
+3. Selecione tipos de atividade variados e adequados ao perfil.
+4. Gere um CÓDIGO único para cada atividade (ex: DB001, STAT005), com base na sigla do tema e sequência numérica.
+5. Retorne o resultado **somente em formato JSON**, seguindo a estrutura abaixo.
+
+### Estrutura de Saída:
+[
+  {
+    "Codigo": "ID único da atividade (ex: DB001)",
+    "Topico": "Tema principal da atividade",
+    "Subtopico": "Conceito específico abordado",
+    "Atividade": "Flashcard | Quiz | Audio | CacaPalavras",
+    "Conteudo": "Breve descrição ou resumo do conceito a ser trabalhado"
+  }
+]
+
+### Regras:
+- Não repita tópicos ou subtemas.
+- Use linguagem clara, didática e envolvente.
+- Combine níveis de dificuldade (fácil a difícil), mas sem informar o nível explicitamente.
+- Inclua tópicos fundamentais e complementares do tema.
+- Não adicione explicações fora do JSON.
+
+Agora, gere a trilha personalizada com base nas seguintes informações:
+
+**Perfil do usuário:**
+[SUBSTITUIR-PERFIL-USUARIO]
+
+**Tema:**
+[SUBSTITUIR-TEMA]"""
