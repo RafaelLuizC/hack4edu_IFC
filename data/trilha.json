@@ -1,0 +1,63 @@
+[
+  {
+    "Codigo": "DB001",
+    "Topico": "Banco de Dados",
+    "Subtopico": "Views",
+    "Atividade": "Flashcard",
+    "Conteudo": "As views permitem criar tabelas virtuais baseadas em consultas SQL.",
+    "Detalhes": {
+      "Flashcard": {
+        "Frente": "O que é uma View no SQL?",
+        "Verso": "Uma consulta salva que pode ser usada como uma tabela virtual."
+      }
+    }
+  },
+  {
+    "Codigo": "DB002",
+    "Topico": "Banco de Dados",
+    "Subtopico": "Stored Procedures",
+    "Atividade": "Quiz",
+    "Conteudo": "Stored Procedures são rotinas armazenadas no banco que executam comandos SQL.",
+    "Detalhes": {
+      "Quiz": {
+        "Pergunta": "Qual a principal vantagem de uma Stored Procedure?",
+        "Alternativas": [
+          {"Texto": "Reduz o tráfego entre aplicação e banco", "Correta": true, "Explicacao": "Procedures executam no servidor, economizando requisições."},
+          {"Texto": "Aumenta a redundância de código", "Correta": false, "Explicacao": "Na verdade, o objetivo é evitar redundância."},
+          {"Texto": "Substitui completamente as tabelas", "Correta": false, "Explicacao": "Procedures não substituem tabelas, apenas executam lógicas."},
+          {"Texto": "Serve apenas para consultas simples", "Correta": false, "Explicacao": "Elas podem conter lógica complexa e transações."}
+        ]
+      }
+    }
+  },
+  {
+    "Codigo": "DB003",
+    "Topico": "Banco de Dados",
+    "Subtopico": "Chaves Primárias",
+    "Atividade": "Audio",
+    "Conteudo": "Importância da chave primária na integridade dos dados.",
+    "Detalhes": {
+      "Audio": {
+        "Titulo": "Chaves Primárias - conversa",
+        "Dialogo": [
+          {"Personagem": "Ana", "Fala": "Você sabe por que usamos chaves primárias?"},
+          {"Personagem": "Carlos", "Fala": "Acredito que seja para identificar registros unicamente, certo?"},
+          {"Personagem": "Ana", "Fala": "Exato. Elas garantem unicidade e facilitam relacionamentos entre tabelas."}
+        ]
+      }
+    }
+  },
+  {
+    "Codigo": "DB004",
+    "Topico": "Banco de Dados",
+    "Subtopico": "Terminologia SQL",
+    "Atividade": "CacaPalavras",
+    "Conteudo": "Termos chave utilizados em SQL.",
+    "Detalhes": {
+      "CacaPalavras": {
+        "Tema": "Termos SQL",
+        "Palavras": ["VIEW", "PROCEDURE", "TRIGGER", "SELECT"]
+      }
+    }
+  }
+]

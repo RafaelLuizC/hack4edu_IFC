@@ -142,10 +142,10 @@ def pipeline_tarefas(texto_referencia):
 if __name__ == "__main__":
 
   # PDF Path é o caminho do PDF que será processado.
-  pdf_path = "pdf_sample/Lista1Estatstica.pdf"
+  pdf_path = "pdf_sample/SlidesEstatistica.pdf"
   
   # Ele ta salvando no MongoDB, para salvar, é necessario verificar a pasta databases/bd_utils.py.
   # Nele tem a função inserir_logs, que salva os dados no MongoDB, se quiser modificar os dados de conexão, é só alterar lá.
 
   #Não retorna nada, apenas executa a pipeline de tarefas.
-  pipeline_tarefas(pdf_path) #
+  pipeline_tarefas(pdf_path)
