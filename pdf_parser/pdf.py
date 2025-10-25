@@ -1,10 +1,51 @@
 from PyPDF2 import PdfReader
-import re, sys, os
+import re
 import pymupdf4llm
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))) #Serve para importar a pasta raiz.
-from pdf_parser.extrator_ppc import gerar_json_fatias
-from util.prompts import *
+
+def gerar_json_fatias(pdf_partes,tamanho_fatia=200): #Padrão de 200 caracteres.
+
+    #Função que vai gerar o JSON das fatias do PDF.
+    #Essa função recebe a lista de partes do PDF, e o numero do ID, que irá ser incrementado.
+    #Ela retorna uma lista de dicionarios, onde cada dicionario contem as partes do PDF, e seus dados de origem.
+
+    pdf_partes_fatiado = []
+
+    for item in pdf_partes:
+        conteudo_fatiado = fatiar_conteudo(item['conteudo'], tamanho_fatia)
+        
+        for parte in conteudo_fatiado:
+            novo_item = {
+                'posicaoFatia': len(pdf_partes_fatiado) + 1,
+                'pagina': item['pagina'],
+                'conteudo': parte
+            }
+
+            pdf_partes_fatiado.append(novo_item)
+    
+    return pdf_partes_fatiado
+
+def fatiar_conteudo(conteudo, tamanho):
+    #Essa função serve para fatiar o conteudo, para que ele possa ser salvo no JSON.
+    #Ele recebe o conteudo (O Pdf inteiro), e o tamanho que ele deve ser fatiado.
+    #Retorna uma lista com o conteudo fatiado.
+    
+    partes = []
+
+    while len(conteudo) > tamanho:
+        corte = tamanho
+
+        #Essa parte serve para cortar o texto, sem cortar no meio de uma palavra.
+        while corte < len(conteudo) and not conteudo[corte].isspace():
+            corte += 1
+        partes.append(conteudo[:corte].strip())
+        
+        conteudo = conteudo[corte:].strip() #Remove o texto que foi cortado.
+    
+    if conteudo:
+        partes.append(conteudo)
+    
+    return partes
 
 def remover_cabecalho(conteudos_paginas, n_palavras=10, threshold=0.5):
     inicios_paginas = []

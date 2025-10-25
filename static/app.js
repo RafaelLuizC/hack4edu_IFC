@@ -1,32 +1,38 @@
 // Carrega trilha e popula index ou activity
 async function loadTrilha(){
-  const res = await fetch('/trilha.json');
-  const data = await res.json();
-  return data;
+  const res = await fetch('/atividades');
+  const data = await res.json(); // array de atividades
+  return data; // cada item: {Codigo, Atividade, Topico, Subtopico, Conteudo, Detalhes}
 }
 
-function el(tag, cls, txt){ const e = document.createElement(tag); if(cls) e.className = cls; if(txt) e.textContent = txt; return e }
+// Helper para criar elementos HTML.
+function el(tag, cls, txt){ const e = document.createElement(tag); if(cls) e.className = cls; if(txt) e.textContent = txt; return e; }
 
 // Página Index
-async function renderIndex(){
-  const container = document.getElementById('lessons');
-  const trilha = await loadTrilha();
+async function renderIndex(){ // Função para renderizar a página inicial com a lista de lições
+  const container = document.getElementById('lessons'); 
+  const trilha = await loadTrilha(); 
   const grid = el('div','lesson-grid');
-  trilha.forEach(item=>{
+  
+  trilha.forEach(item=>{ // cria card para cada atividade
     const card = el('div','card');
-    card.onclick = ()=> location.href = '/activity/' + item.Codigo;
-    const meta = el('div','meta', `${item.Codigo} • ${item.Atividade}`);
-    const h = el('h3',null, item.Topico + ' — ' + item.Subtopico);
-    const p = el('p',null, item.Conteudo);
-    card.append(meta,h,p);
-    grid.append(card);
+    card.onclick = ()=> location.href = '/activity/' + item.Codigo; // navega para a atividade, e passa o código na URL.
+    
+    const meta = el('div','meta', `${item.Codigo} • ${item.Atividade}`); // exibe código e tipo de atividade
+    const h = el('h3',null, item.Topico + ' — ' + item.Subtopico); // título e subtítulo
+    const p = el('p',null, item.Conteudo); // descrição
+    
+    card.append(meta,h,p); // Monta o card com as informações.
+    grid.append(card); // Adiciona o card ao grid.
   });
-  container.append(grid);
+  container.append(grid); // Adiciona o grid ao container principal.
 }
 
 // Página Activity
+// Pagina de atividades, ela irá carregar a atividade conforme o código na URL.
 async function renderActivity(codigo){
-  const container = document.getElementById('activity-container');
+  
+  const container = document.getElementById('activity-container'); 
   const trilha = await loadTrilha();
   const item = trilha.find(x=>x.Codigo === codigo);
   if(!item){ container.append(el('p',null,'Atividade não encontrada.')); return }

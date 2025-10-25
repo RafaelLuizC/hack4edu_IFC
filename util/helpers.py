@@ -1,95 +1,114 @@
 import os, json, re, ast
 from typing import Any, Optional
 
-def _extract_json_substring(s: str) -> Optional[str]:
+def parse_json_string(string: str) -> Optional[str]:
     # encontra o primeiro objeto/array JSON aparente e tenta devolver substring balanceada
-    starts = [(m.start(), m.group()) for m in re.finditer(r'[\[\{]', s)]
+    
+    starts = [(m.start(), m.group()) for m in re.finditer(r'[\[\{]', string)] # Encontra indices de abertura. 
     for start_idx, ch in starts:
-        end_ch = ']' if ch == '[' else '}'
-        stack = []
-        for i in range(start_idx, len(s)):
-            if s[i] == ch:
+        
+        end_ch = ']' if ch == '[' else '}' # Caracteres de fechamento correspondentes
+        stack = [] # Pilha...
+        
+        for i in range(start_idx, len(string)): # Percorre a string a partir do caractere de abertura
+
+            if string[i] == ch: # Se encontrou caractere de abertura
                 stack.append(ch)
-            elif s[i] == end_ch:
-                if stack:
+            
+            elif string[i] == end_ch: # Se encontrou caractere de fechamento
+                if stack: # Se a pilha não estiver vazia, desempilha.
                     stack.pop()
-                    if not stack:
-                        return s[start_idx:i+1]
-        # se não balanceou, tenta até o fim (retorna parcialmente)
-        # não retorna aqui para tentar outros starts
+    
+                    if not stack: # Se a pilha estiver vazia, significa que encontramos correspondência.
+                        return string[start_idx:i+1]
+    
+    # Não retorna aqui para tentar outros starts
     return None
 
-def _remove_trailing_commas(s: str) -> str:
+def remove_virgulas_parenteses(string: str) -> str:
     # remove vírgulas antes de ] ou }
-    s = re.sub(r',\s*(?=[}\]])', '', s)
-    return s
+    
+    string = re.sub(r',\s*(?=[}\]])', '', string)
+    return string
 
-def _normalize_quotes(s: str) -> str:
+def normaliza_aspas(string: str) -> str:
     # tenta converter aspas simples em aspas duplas somente em strings literais simples
     # fallback conservador: usa ast.literal_eval quando possível (mais seguro)
-    return s.replace('\r', ' ').replace('\t', ' ')
+    
+    return string.replace('\r', ' ').replace('\t', ' ')
 
 def trata_json_resposta(texto: Any) -> Any:
+    # Nem sempre o modelo formata corretamente a resposta em JSON, então essa função tenta consertar isso.
+    # Essa função tenta converter uma resposta de texto em JSON.
+    # Tenta ser uma função bem robusta, ela possui 4 métodos diferentes para tentar converter o texto em JSON.
+    # Se todos os métodos falharem, ela retorna erro.
 
-
-    if isinstance(texto, (dict, list)):
+    if isinstance(texto, (dict, list)): # Se já for dict ou list, retorna como está.
         return texto
 
-    s = str(texto).strip()
+    string_busca = str(texto).strip() # Garante que é uma string, e remove espaços em branco desnecessários.
 
-    # tentativa 1: json.loads direto
+    # Simplesmente tenta json.loads primeiro, vai que né. 
     try:
-        return json.loads(s)
+        return json.loads(string_busca)
     except Exception:
         pass
 
-    # tentativa 2: ast.literal_eval (aceita singles quotes, True/False, None)
+    # Segunda tentativa: tenta usar ast.literal_eval para interpretar a string.
     try:
-        parsed = ast.literal_eval(s)
+        parsed = ast.literal_eval(string_busca)
         # transforma para JSON-serializável (converte tuplas em listas)
         return json.loads(json.dumps(parsed, default=str))
+    
     except Exception:
         pass
 
-    # tentativa 3: extrair substring JSON balanceada
-    sub = _extract_json_substring(s)
+    # Terceira tentativa: tenta extrair substring JSON aparente e processar, usa normalização de aspas e remoção de vírgulas.
+    sub = parse_json_string(string_busca)
     if sub:
-        sub_try = _remove_trailing_commas(_normalize_quotes(sub))
+        sub_try = remove_virgulas_parenteses(normaliza_aspas(sub))
+        
         try:
-            return json.loads(sub_try)
+            return json.loads(sub_try) # tenta com json.loads primeiro.
+        
         except Exception:
-            try:
+            try: # tenta com literal_eval se json.loads falhar.
                 parsed = ast.literal_eval(sub_try)
                 return json.loads(json.dumps(parsed, default=str))
+            
             except Exception:
-                pass
+                pass # Se falhar, continua para a próxima tentativa.
 
-    # tentativa 4: reparar com remoção de vírgulas finais e tentar novamente em todo texto
+    # Quarta tentativa: Tenta usando normalização de aspas e remoção de vírgulas.
     try:
-        repaired = _remove_trailing_commas(_normalize_quotes(s))
+        repaired = remove_virgulas_parenteses(normaliza_aspas(string_busca))
         return json.loads(repaired)
     except Exception:
         pass
 
-    # última tentativa: busca por linhas que parecem JSON e tenta linha a linha
-    lines = s.splitlines()
+    # Quinta tentativa: busca linhas que parecem JSON e tenta linha a linha.
+    # Esta na ultima posição porque é a menos eficiente. Muito menos.
+    lines = string_busca.splitlines() # Divide em linhas.
     candidates = []
-    for line in lines:
+    
+    for line in lines: # Para cada linha, remove espaços em branco desnecessários.
         line = line.strip()
-        if line.startswith('{') or line.startswith('['):
+        
+        if line.startswith('{') or line.startswith('['): # Se a linha começar com { ou [, considera como candidata.
             candidates.append(line)
-    for c in candidates:
+    
+    for c in candidates: # Para cada candidata, tenta converter em JSON.
         try:
-            return json.loads(_remove_trailing_commas(_normalize_quotes(c)))
+            return json.loads(remove_virgulas_parenteses(normaliza_aspas(c))) # Tenta com json.loads primeiro.
         except Exception:
             try:
-                parsed = ast.literal_eval(c)
-                return json.loads(json.dumps(parsed, default=str))
+                parsed = ast.literal_eval(c) # Tenta com literal_eval se json.loads falhar.
+                return json.loads(json.dumps(parsed, default=str)) 
             except Exception:
                 continue
 
-    # se tudo falhar, retorna lista vazia e informa erro (caller pode logar)
-    raise ValueError(f"Não foi possível converter a resposta em JSON. Conteúdo (primeiros 200 chars): {s[:200]!r}")
+    # Se tudo falhar, retorna lista vazia e informa erro. Retorna 100 primeiros chars para debug.
+    raise ValueError(f"Não foi possível converter a resposta em JSON. Conteúdo (primeiros 100 chars): {string_busca [:100]!r}")
 
 def separador_item(linha,palavra_inicial,palavra_final):
     
@@ -113,45 +132,38 @@ def separador_item(linha,palavra_inicial,palavra_final):
     return item #Retorna o item.
 
 
-def extrair_indices_sumario(arquivo):
-    sumario_encontrado = False
-    indices = []
+def check_pdf(arquivo_pdf, min_palavras_por_pagina=20):
 
-    for pagina in range(len(arquivo.pages)):
-        texto_pagina = arquivo.pages[pagina].extract_text()
-        texto_pagina = texto_pagina.split("\n")
-        texto_pagina = texto_pagina[3:-2]
-        texto_pagina = " ".join(texto_pagina)
+    # Essa função verifica se o PDF está quebrado ou não, e retorna "quebrado", "imagem" ou "texto".
+    #Ela recebe o arquivo PDF e o número mínimo de palavras por página como parâmetros.
+    #Caso ele não consiga encontrar texto legivel, ele vai considerar que o PDF está quebrado.
 
-        if "S UMÁRIO" in texto_pagina:  # Por algum motivo, tem um espaço no inicio do texto.
-            sumario_encontrado = True
+    for page in arquivo_pdf.pages:
+        texto = page.extract_text() or ""
+        palavras = re.findall(r'\b\w+\b', texto)
+        
+        if not palavras: 
+            return "quebrado" # Se não houver palavras, considera "quebrado" 
+        
+        palavras_numericas = [palavra for palavra in palavras if palavra.isdigit()] #Verifica se a "palavra" é um número.
+        proporcao_numerica = len(palavras_numericas) / len(palavras)
+        
+        if proporcao_numerica > 0.75:
+            return "quebrado"  # Se mais de 75% das palavras forem números, considera "quebrado"
+        
+        if 0 < len(palavras) < min_palavras_por_pagina:
+            return "quebrado"  # Se houver texto, mas insuficiente, considera "quebrado"
+        
+        if len(palavras) >= min_palavras_por_pagina:
+            return "texto"  # Se houver texto suficiente, considera "texto"
+    
+    return "imagem"
 
-        if sumario_encontrado:  # Se o sumário foi encontrado, começa a capturar os índices
-            texto_pagina = texto_pagina.split(" ")
+def verifica_extensao(link):
+    
+    extensao = link.split(".")[-1] #Pega a extensão do link, a partir do ponto final.
 
-            # Essa parte faz a filtragem dos dados da lista de texto_pagina, para que sejam capturados apenas os índices.
-            # Ela não verifica a Pagina, mas somente o que já foi adicionado anteriormente à lista de indices.
-            for i in range(len(texto_pagina)):
-                texto_indice = []
-                if "." in texto_pagina[i]:
-                    try:
-                        if texto_pagina[i][0].isdigit():
-                            num_indice = texto_pagina[i]
+    if not extensao or len(extensao) > 5:  # Caso o link não tenha extensão, a verificação de comprimento, serve para evitar links com extensões muito longas.
+        extensao = "nulo"
 
-                        while not texto_pagina[i].isdigit():
-                            texto_indice.append(texto_pagina[i])
-                            i += 1
-                        if texto_pagina[i].isdigit() and (int(texto_pagina[i].strip()) < len(arquivo.pages)):
-                            indices.append({
-                                "Numero": num_indice,
-                                "Texto": ((" ".join(texto_indice)).replace(num_indice, "")).strip(),
-                                "Pagina": int(texto_pagina[i].strip())
-                            })
-                    except IndexError:
-                        break
-
-            # Para de procurar pelo índice quando encontrar a palavra "REFERÊNCIAS"
-            if "REFERÊNCIAS" in texto_pagina:
-                break
-
-    return indices
+    return extensao

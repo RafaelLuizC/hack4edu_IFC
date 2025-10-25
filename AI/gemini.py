@@ -59,4 +59,3 @@ def generate(conteudo, prompt_instructions):
       result_text += chunk.text # Concatena o texto recebido ao resultado final.
 
   return result_text # Retorna o texto em String.
-
