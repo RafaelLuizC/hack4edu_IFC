@@ -15,11 +15,11 @@ def activity(codigo):
 @app.route('/atividades')
 def trilha_json():
     # Aqui você pode buscar os dados do banco de dados.
-    #data = get_colecao('atividades_detalhadas')
+    data = get_colecao('atividades_detalhadas')
 
     # Esta rota retorna a trilha de atividades em formato JSON, para testes.
-    with open ('data/sample_atividades.json', 'r', encoding='utf-8') as f:
-        data = json.load(f)
+    # with open ('data/sample_atividades.json', 'r', encoding='utf-8') as f:
+    #     data = json.load(f)
     return jsonify(data)
 
 if __name__ == '__main__':

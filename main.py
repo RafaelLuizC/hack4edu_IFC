@@ -7,9 +7,13 @@ from AI.gemini import generate
 from AI.gemini_audio import gera_audio_conversa
 
 # Aqui se insere o perfil do usuário, ele pode definir preferências de aprendizado, interesses e objetivos.
-perfil_do_usuario ="""Rafael Luiz, tem 26 anos e quer aprender mais sobre Estatistica e Probabilidade para se sair bem em suas aulas no IFC,
-gosta de bicicletas, jogos de tabuleiro e tecnologia.
-Prefere aprender por meio de exemplos práticos."""
+# perfil_do_usuario ="""Rafael Luiz, tem 26 anos e quer aprender mais sobre Estatistica e Probabilidade para se sair bem em suas aulas no IFC,
+# gosta de bicicletas, jogos de tabuleiro e tecnologia.
+# Prefere aprender por meio de exemplos práticos."""
+
+perfil_do_usuario ="""Vitória Pereira, tem 23 anos e quer aprender mais sobre Estatística e Probabilidade para se sair bem em suas aulas no IFC,
+gosta de novelas, música e tecnologia.
+"""
 
 def pipeline_tarefas(texto_referencia, perfil_usuario):
 
@@ -87,7 +91,7 @@ def pipeline_tarefas(texto_referencia, perfil_usuario):
 if __name__ == "__main__":
 
   # PDF Path é o caminho do PDF que será processado.
-  pdf_path = "pdf_sample/Atividade3Matematica.pdf"
+  pdf_path = "pdf_sample/Lista3Estatistica.pdf"
   
   # Ele ta salvando no MongoDB, para salvar, é necessario verificar a pasta databases/bd_utils.py.
   # Nele tem a função inserir_logs, que salva os dados no MongoDB, se quiser modificar os dados de conexão, é só alterar lá.

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protótipo de Animação</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: grid;
+            place-items: center;
+            min-height: 90vh;
+            background-color: #f0f0f0;
+        }
+        
+        /* O "Ambiente" que você pediu */
+        #ambiente-personagem {
+            width: 300px;
+            height: 400px;
+            background-color: #d4f1f4; /* Um fundo tipo "céu" */
+            border: 5px solid #0077b6;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        /* O "Container" do personagem */
+        /* Usamos position: relative para que as imagens internas
+           (com position: absolute) fiquem "presas" a ele */
+        #personagem-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Esta é a estrutura para adicionar as imagens do personagem */
+        /* Todas as partes do personagem ficam uma sobre a outra */
+        .personagem-sprite {
+            position: absolute;
+            top: 50px;  /* Ajuste a posição X/Y do seu personagem */
+            left: 50px; /* Ajuste a posição X/Y do seu personagem */
+            width: 200px; /* Defina o tamanho do seu personagem */
+            height: auto;
+        }
+
+        /* Camadas (z-index):
+           Base (corpo) fica no fundo (1)
+           Boca e Olhos ficam por cima (2)
+        */
+        #personagem-base { z-index: 1; }
+        
+        .personagem-boca {
+            position: absolute;
+            z-index: 2;
+            top: 44%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 19%;
+            height: 9%;
+        }
+
+        /* Estilo para imagens da boca (duas camadas para crossfade) */
+        .boca-img {
+            position: static;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: center;
+            /* Transição suave de opacidade e leve transformação */
+            transition: opacity .1s linear, transform .1s ease;
+            will-change: opacity, transform;
+        }
+        
+        .boca-img:not(:first-child) {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        /* Controles de UI */
+        #controles {
+            margin-top: 20px;
+            text-align: center;
+        }
+        textarea { width: 90%; }
+
+    </style>
+</head>
+<body>
+    <div id="ambiente-personagem">
+        <div id="personagem-container">
+            <img id="personagem-base" class="personagem-sprite" src="{{ url_for('static', filename='personagem/base.png') }}">
+            <!-- Duas imagens sobrepostas para permitir crossfade suave entre visemas -->
+            <div class="personagem-boca">
+                <img id="personagem-boca-front" class="personagem-sprite boca-img" src="{{ url_for('static', filename='bocas/boca_sorriso.png') }}">
+                <img id="personagem-boca-back" class="personagem-sprite boca-img" src="{{ url_for('static', filename='bocas/boca_neutra.png') }}" style="opacity:0;">
+            </div>
+        </div>
+    </div>
+
+    <div id="controles">
+        <textarea id="texto-para-falar" rows="3">Olá mundo, este é o meu protótipo</textarea>
+        <br>
+        <button id="botao-falar">Falar</button>
+    </div>
+    
+    <audio id="audio-player"></audio>
+
+    <script>
+        // --- Referências aos elementos ---
+        const botaoFalar = document.getElementById('botao-falar');
+        const campoTexto = document.getElementById('texto-para-falar');
+        const audioPlayer = document.getElementById('audio-player');
+        
+    // --- Referências às imagens da boca (front/back) ---
+    const bocaFront = document.getElementById('personagem-boca-front');
+    const bocaBack = document.getElementById('personagem-boca-back');
+
+    // --- Variáveis de estado da animação ---
+    let listaVisemas = [];
+    let indiceVisemaAtual = 0;
+    let crossfadeVisibleFront = true; // true -> front está visível
+
+        /*
+         * O MAPEAMENTO: A PARTE MAIS IMPORTANTE
+         * Aqui nós conectamos o "comando" do visema (ex: "o", "a", "s")
+         * com a imagem de boca que você criou.
+         *
+         * Os nomes à esquerda (ex: "o", "a") devem bater com
+         * os valores "value" que o seu backend `app.py` envia.
+         */
+        const MAPA_VISEMAS = {
+            "sil": "{{ url_for('static', filename='bocas/boca_neutra.png') }}",
+            "o":   "{{ url_for('static', filename='bocas/boca_oh.png') }}",
+            "u":   "{{ url_for('static', filename='bocas/boca_oh.png') }}",
+            "a":   "{{ url_for('static', filename='bocas/boca_ah.png') }}",
+            "e":   "{{ url_for('static', filename='bocas/boca_e.png') }}",
+            "i":   "{{ url_for('static', filename='bocas/boca_e.png') }}",
+            "m":   "{{ url_for('static', filename='bocas/boca_neutra.png') }}",
+            "b":   "{{ url_for('static', filename='bocas/boca_neutra.png') }}",
+            "p":   "{{ url_for('static', filename='bocas/boca_neutra.png') }}",
+            "f":   "{{ url_for('static', filename='bocas/boca_f.png') }}",
+            "v":   "{{ url_for('static', filename='bocas/boca_f.png') }}",
+            "l":   "{{ url_for('static', filename='bocas/boca_l.png') }}",
+            "t":   "{{ url_for('static', filename='bocas/boca_l.png') }}",
+            "d":   "{{ url_for('static', filename='bocas/boca_l.png') }}",
+            "s":   "{{ url_for('static', filename='bocas/boca_sorriso.png') }}",
+            "z":   "{{ url_for('static', filename='bocas/boca_sorriso.png') }}",
+            "ch":  "{{ url_for('static', filename='bocas/boca_sorriso.png') }}",
+            "j":   "{{ url_for('static', filename='bocas/boca_sorriso.png') }}"
+        };
+        // (Nota: Usamos `url_for` do Flask para gerar os caminhos corretos)
+
+        // --- Crossfade entre imagens (pré-carrega e faz fade suave) ---
+        function preloadVisemaImages() {
+            const urls = Object.values(MAPA_VISEMAS);
+            urls.forEach(u => {
+                const img = new Image();
+                img.src = u;
+            });
+        }
+
+        // Faz o crossfade para a URL fornecida
+        function crossfadeTo(url) {
+            // Se url for falsy, usa neutro
+            const target = url || MAPA_VISEMAS["sil"];
+
+            // Escolhe quem está por trás agora
+            const front = bocaFront;
+            const back = bocaBack;
+
+            // Carrega a nova imagem no elemento que está com opacidade 0
+            const hidden = crossfadeVisibleFront ? back : front;
+            const visible = crossfadeVisibleFront ? front : back;
+
+            if (hidden.src !== target) hidden.src = target;
+
+            // Garante que o hidden começa com opacity 0, então faz fade-in
+            hidden.style.transition = 'opacity .1s linear, transform .1s ease';
+            visible.style.transition = 'opacity .1s linear, transform .1s ease';
+
+            // Force layout to ensure transition
+            void hidden.offsetWidth;
+
+            hidden.style.opacity = 1;
+            hidden.style.transform = 'scale(1)';
+            visible.style.opacity = 0;
+            visible.style.transform = 'scale(0.98)';
+
+            // Quando a transição terminar, mantém o estado e marca quem está visível
+            const onEnd = (e) => {
+                // removendo handler para não acumular
+                hidden.removeEventListener('transitionend', onEnd);
+                // Normaliza transforms
+                hidden.style.transform = 'scale(1)';
+                visible.style.transform = 'scale(1)';
+                // O front/back lógico alterna
+                crossfadeVisibleFront = !crossfadeVisibleFront;
+            };
+
+            hidden.addEventListener('transitionend', onEnd);
+        }
+
+        // --- O "Loop" da Animação ---
+        function loopDeAnimacao() {
+            if (audioPlayer.paused || audioPlayer.ended) {
+                crossfadeTo(MAPA_VISEMAS["sil"]); // Volta ao neutro
+                return;
+            }
+
+            const tempoAtualAudio = audioPlayer.currentTime * 1000;
+            const proximoVisema = listaVisemas[indiceVisemaAtual + 1];
+
+            if (proximoVisema && tempoAtualAudio >= proximoVisema.time) {
+                indiceVisemaAtual++;
+                const visemaAtual = listaVisemas[indiceVisemaAtual];
+                const nomeVisema = visemaAtual.value;
+                const novaImagemBoca = MAPA_VISEMAS[nomeVisema] || MAPA_VISEMAS["sil"];
+                crossfadeTo(novaImagemBoca);
+            }
+
+            requestAnimationFrame(loopDeAnimacao);
+        }
+
+        // --- Função Principal: Chamar a API e Iniciar a Fala ---
+        async function falar() {
+            const texto = campoTexto.value;
+
+            // 1. Chamar nossa API Flask
+            const resposta = await fetch('/gerar-fala', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ texto: texto }),
+            });
+            
+            const dados = await resposta.json();
+
+            // 2. Configurar os dados recebidos
+            listaVisemas = dados.visemes;
+            indiceVisemaAtual = 0;
+            
+            // 3. Configurar o áudio
+            audioPlayer.src = 'data:audio/mp3;base64,' + dados.audio_base64;
+            audioPlayer.load();
+            
+            // 4. Iniciar tudo!
+            audioPlayer.play();
+            requestAnimationFrame(loopDeAnimacao); // Inicia o loop
+        }
+
+        // --- Event Listeners ---
+        botaoFalar.addEventListener('click', falar);
+
+        audioPlayer.addEventListener('ended', () => {
+            imagemBoca.src = MAPA_VISEMAS["sil"]; // Garante que volta ao neutro
+        });
+
+    </script>
+</body>
+</html>
