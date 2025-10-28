@@ -65,71 +65,8 @@ def prompt_parser():
     }
 ]"""
 
-# Prompt para gerar as atividades detalhadas a partir da trilha criada
-def prompt_atividades():
-  def prompt_atividades():
-    return """ Sua tarefa é gerar o conteúdo detalhado de cada atividade a partir da TRILHA fornecida em JSON.
-
-  ### Instruções:
-  1. Para cada item da trilha, identifique o tipo de atividade (Quiz, Flashcard, Audio ou CacaPalavras).
-  2. Gere os dados completos da atividade, preenchendo o campo “Detalhes” conforme o tipo.
-  3. Retorne o resultado **somente em formato JSON**, seguindo a estrutura abaixo.
-
-  ### Estrutura de Saída Final:
-  [
-    {
-      "Codigo": "Mesmo código da trilha original (ex: DB001)",
-      "Topico": "Tema principal",
-      "Subtopico": "Conceito abordado",
-      "Atividade": "Flashcard | Quiz | Audio | CacaPalavras",
-      "Conteudo": "Resumo breve do conceito trabalhado",
-      "Detalhes": {
-        "Flashcard": {
-          "Frente": "Pergunta ou conceito para memorizar",
-          "Verso": "Resposta ou explicação resumida"
-        },
-        "Quiz": {
-          "Pergunta": "Pergunta clara e direta sobre o tema",
-          "Alternativas": [
-            {"Texto": "Alternativa correta", "Correta": true, "Explicacao": "Justificativa do porquê está correta"},
-            {"Texto": "Alternativa incorreta 1", "Correta": false, "Explicacao": "Motivo do erro"},
-            {"Texto": "Alternativa incorreta 2", "Correta": false, "Explicacao": "Motivo do erro"},
-            {"Texto": "Alternativa incorreta 3", "Correta": false, "Explicacao": "Motivo do erro"}
-          ]
-        },
-        "Audio": {
-          "Titulo": "Tema central da conversa",
-          "SSML": "<speak> ... </speak>"
-        },
-        "CacaPalavras": {
-          "Tema": "Assunto central",
-          "Palavras": ["Palavra1", "Palavra2", "Palavra3", "Palavra4"]
-        }
-      }
-    }
-  ]
-
-  ### Regras:
-  - Mantenha consistência entre os “Códigos” e tópicos da trilha original.
-  - Cada atividade deve conter apenas o tipo correspondente em “Detalhes”.
-  - As perguntas e explicações devem ser curtas, claras e com tom pedagógico.
-  - Para atividades do tipo Audio, gere o conteúdo em SSML válido:
-    - Use a tag raiz <speak>.
-    - Estruture em parágrafos (<p>) e sentenças (<s>) quando apropriado.
-    - Inclua pausas com <break time=\"...\"/> e marqueções de prosódia com <prosody rate=\"...\" pitch=\"...\"> se necessário.
-    - Use <emphasis> para destacar termos importantes.
-    - Produza SSML em português (pt-BR) e mantenha cada SSML com duração curta (30-90s aproximadamente).
-    - Insira apenas a string SSML no campo "SSML" sem metadados adicionais.
-    - Retorne Marktime em milissegundos (ms) para pausas, e onde cada visema é pronunciada.
-  - Nos demais tipos, siga os formatos especificados.
-  - Retorne **somente o JSON**, sem explicações adicionais.
-
-  Agora gere as atividades detalhadas para a seguinte trilha:
-  """
-
 # Prompt de criação da trilha de aprendizado
 # Ele define quais atividades que o usuário irá receber.
-
 def prompt_trilha():
   return """Sua tarefa é criar uma TRILHA DE APRENDIZADO adaptada ao perfil do usuário e ao tema solicitado.
 
@@ -168,3 +105,62 @@ Agora, gere a trilha personalizada com base nas seguintes informações:
 
 **Tema:**
 [SUBSTITUIR-TEMA]"""
+
+# Prompt para gerar as atividades detalhadas a partir da trilha criada
+# Essa é a terceira etapa do processo.
+def prompt_atividades():
+  return """ Sua tarefa é gerar o conteúdo detalhado de cada atividade a partir da TRILHA fornecida em JSON.
+
+### Instruções:
+1. Para cada item da trilha, identifique o tipo de atividade (Quiz, Flashcard, Audio ou CacaPalavras).
+2. Gere os dados completos da atividade, preenchendo o campo “Detalhes” conforme o tipo.
+3. Retorne o resultado **somente em formato JSON**, seguindo a estrutura abaixo.
+
+### Estrutura de Saída Final:
+[
+  {
+    "Codigo": "Mesmo código da trilha original (ex: DB001)",
+    "Topico": "Tema principal",
+    "Subtopico": "Conceito abordado",
+    "Atividade": "Flashcard | Quiz | Audio | CacaPalavras",
+    "Conteudo": "Resumo breve do conceito trabalhado",
+    "Detalhes": {
+      "Flashcard": {
+        "Frente": "Pergunta ou conceito para memorizar",
+        "Verso": "Resposta ou explicação resumida"
+      },
+      "Quiz": {
+        "Pergunta": "Pergunta clara e direta sobre o tema",
+        "Alternativas": [
+          {"Texto": "Alternativa correta", "Correta": true, "Explicacao": "Justificativa do porquê está correta"},
+          {"Texto": "Alternativa incorreta 1", "Correta": false, "Explicacao": "Motivo do erro"},
+          {"Texto": "Alternativa incorreta 2", "Correta": false, "Explicacao": "Motivo do erro"},
+          {"Texto": "Alternativa incorreta 3", "Correta": false, "Explicacao": "Motivo do erro"}
+        ]
+      },
+      "Audio": {
+        "Titulo": "Tema central da conversa",
+        "Dialogo": [
+          {"Personagem": "Ana", "Fala": "Fala introdutória ou explicação didática"},
+          {"Personagem": "Carlos", "Fala": "Pergunta, dúvida ou exemplo prático"},
+          {"Personagem": "Ana", "Fala": "Resposta complementar ou conclusão da ideia"}
+        ]
+      },
+      "CacaPalavras": {
+        "Tema": "Assunto central",
+        "Palavras": ["Palavra1", "Palavra2", "Palavra3", "Palavra4"]
+      }
+    }
+  }
+]
+
+### Regras:
+- Mantenha consistência entre os “Códigos” e tópicos da trilha original.
+- Cada atividade deve conter apenas o tipo correspondente em “Detalhes”.
+- As perguntas e explicações devem ser curtas, claras e com tom pedagógico.
+- Nos diálogos, use linguagem natural e educativa, como se fosse uma conversa leve.
+- Retorne **somente o JSON**, sem explicações adicionais.
+- Para o caca-palavras, escolha palavras relevantes ao tema, que estejam presentes no conteúdo, e que não sejam excessivamente longas, nem possuam espaços ou caracteres especiais.
+
+Agora gere as atividades detalhadas para a seguinte trilha:
+"""

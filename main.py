@@ -15,11 +15,11 @@ perfil_do_usuario ="""Vitória Pereira, tem 23 anos e quer aprender mais sobre E
 gosta de novelas, música e tecnologia.
 """
 
-def pipeline_tarefas(texto_referencia, perfil_usuario):
+def pipeline_tarefas(materia, pdf_referencia, perfil_usuario):
 
     # Primeira etapa do Pipeline: Extrair texto do PDF e corrigir ele.
     print ("Lendo texto do PDF...")
-    texto_extraido = extrair_dados_pdf(texto_referencia) 
+    texto_extraido = extrair_dados_pdf(pdf_referencia) 
     texto_extraido = ' '.join(texto_extraido) # Concatena a lista em uma string única.
 
     # --- Gerar Tópicos de Estudo ---
@@ -33,6 +33,10 @@ def pipeline_tarefas(texto_referencia, perfil_usuario):
 
     # Salva os tópicos gerados no banco de dados.
     for item in topicos_gerados:
+
+        item["Materia"] = materia  # Adiciona o campo matéria ao item.
+        item["Referencia"] = pdf_referencia  # Adiciona o texto extraído ao item.
+
         # A função se chama inserir_logs, pq peguei de outro codigo.
         inserir_dados('atividades_parser', item)
 
@@ -52,8 +56,9 @@ def pipeline_tarefas(texto_referencia, perfil_usuario):
     trilha_aprendizado = trata_json_resposta(trilha_aprendizado) # Converte a resposta em JSON.
 
     #Salva a trilha de aprendizado no banco de dados.
-    for item in trilha_aprendizado: #Para cada item na trilha de aprendizado.
-        inserir_dados('trilhas_aprendizado', item)
+    for trilha in trilha_aprendizado: #Para cada item na trilha de aprendizado.
+        trilha["Materia"] = materia  # Adiciona o campo matéria ao item.
+        inserir_dados('trilhas_aprendizado', trilha)
 
     # --- Gerar Atividades Detalhadas ---
     print ("\nGerando atividades detalhadas...\n")
@@ -86,15 +91,16 @@ def pipeline_tarefas(texto_referencia, perfil_usuario):
                         atividade["AudioError"] = str(e) # Adiciona a mensagem de erro.
         
         # Nenhuma das outras atividades precisam de processamento extra, então insere direto no banco.
+        atividade["Materia"] = materia  # Adiciona o campo matéria ao item.
         inserir_dados('atividades_detalhadas', atividade)
 
 if __name__ == "__main__":
 
   # PDF Path é o caminho do PDF que será processado.
-  pdf_path = "pdf_sample/Lista3Estatistica.pdf"
+  pdf_path = "pdf_sample/Atividade3Matematica.pdf"
   
   # Ele ta salvando no MongoDB, para salvar, é necessario verificar a pasta databases/bd_utils.py.
   # Nele tem a função inserir_logs, que salva os dados no MongoDB, se quiser modificar os dados de conexão, é só alterar lá.
 
   # Não retorna nada, apenas executa a pipeline de tarefas.
-  pipeline_tarefas(pdf_path, perfil_do_usuario)
+  pipeline_tarefas("Matemática",pdf_path, perfil_do_usuario)

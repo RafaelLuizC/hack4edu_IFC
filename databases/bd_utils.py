@@ -8,7 +8,7 @@ def inserir_dados(collection_name, dados):
     # Ela conecta no banco de dados 'H4E_DB' e insere os dados na coleção especificada, antes servia para Logs, mas foi adaptada para inserir qualquer dado.
 
     client = MongoClient('localhost', 27017)
-    db = client['H4E_DB'] #Nome do Banco de Dados
+    db = client['H4E_DB_v2'] #Nome do Banco de Dados
 
     try:
         print (f"Inserindo log na coleção '{collection_name}'")
@@ -30,7 +30,7 @@ def resetar_bd(colecao):
     # CUIDADO COM ESSA FUNÇÃO, POIS ELA DELETA TODOS OS DADOS DA COLEÇÃO.
 
     client = MongoClient('localhost', 27017)
-    db = client['H4E_DB'] #Nome do Banco de Dados
+    db = client['H4E_DB_v2'] #Nome do Banco de Dados
     colecao = db[colecao]
 
     resultado = colecao.delete_many({})
@@ -67,7 +67,7 @@ def get_colecao(colecao):
     dados = []
 
     client = MongoClient('localhost', 27017)
-    db = client['H4E_DB'] #Nome do Banco de Dados
+    db = client['H4E_DB_v2'] #Nome do Banco de Dados
     colecao = db[colecao]
 
     for doc in colecao.find():
