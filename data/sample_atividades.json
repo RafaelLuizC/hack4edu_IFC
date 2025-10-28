@@ -1,64 +1,591 @@
-[
-  {
-    
-    "Codigo": "DB001",
-    "Topico": "Banco de Dados",
-    "Subtopico": "Views",
-    "Atividade": "Flashcard",
-    "Conteudo": "As views permitem criar tabelas virtuais baseadas em consultas SQL.",
-    "Detalhes": {
-      "Flashcard": {
-        "Frente": "O que é uma View no SQL?",
-        "Verso": "Uma consulta salva que pode ser usada como uma tabela virtual."
-      }
+[{
+  "_id": {
+    "$oid": "690138da283e50845b39f991"
+  },
+  "Codigo": "ALGBOO001",
+  "Topico": "Álgebra Booleana",
+  "Subtopico": "Associação de Valores",
+  "Atividade": "Flashcard",
+  "Conteudo": "Qual valor numérico representa o Falso (F) e qual representa o Verdadeiro (V) na Álgebra Booleana? Pense na lógica por trás de um interruptor de luz!",
+  "Detalhes": {
+    "Flashcard": {
+      "Frente": "Quais os valores numéricos para Falso e Verdadeiro na Álgebra Booleana?",
+      "Verso": "Falso (F) é representado por 0 e Verdadeiro (V) é representado por 1."
     }
   },
-  {
-    "Codigo": "DB002",
-    "Topico": "Banco de Dados",
-    "Subtopico": "Stored Procedures",
-    "Atividade": "Quiz",
-    "Conteudo": "Stored Procedures são rotinas armazenadas no banco que executam comandos SQL.",
-    "Detalhes": {
-      "Quiz": {
-        "Pergunta": "Qual a principal vantagem de uma Stored Procedure?",
-        "Alternativas": [
-          {"Texto": "Reduz o tráfego entre aplicação e banco", "Correta": true, "Explicacao": "Procedures executam no servidor, economizando requisições."},
-          {"Texto": "Aumenta a redundância de código", "Correta": false, "Explicacao": "Na verdade, o objetivo é evitar redundância."},
-          {"Texto": "Substitui completamente as tabelas", "Correta": false, "Explicacao": "Procedures não substituem tabelas, apenas executam lógicas."},
-          {"Texto": "Serve apenas para consultas simples", "Correta": false, "Explicacao": "Elas podem conter lógica complexa e transações."}
-        ]
-      }
+  "Materia": "Matemática"
+},
+{
+  "_id": {
+    "$oid": "690138da283e50845b39f993"
+  },
+  "Codigo": "ALGBOO002",
+  "Topico": "Álgebra Booleana",
+  "Subtopico": "Operações Booleanas - OU (+)",
+  "Atividade": "Quiz",
+  "Conteudo": "Em Álgebra Booleana, a operação '+' representa qual conectivo lógico e qual o seu resultado para as entradas 1+0? Dica: 'OU' significa que se uma das condições for verdadeira, o resultado é verdadeiro.",
+  "Detalhes": {
+    "Quiz": {
+      "Pergunta": "A operação '+' na Álgebra Booleana representa qual conectivo e qual o resultado de 1+0?",
+      "Alternativas": [
+        {
+          "Texto": "OU, resultado 1",
+          "Correta": true,
+          "Explicacao": "O símbolo '+' representa o conectivo lógico OU. Como uma das entradas (1) é verdadeira, o resultado da operação OU é verdadeiro (1)."
+        },
+        {
+          "Texto": "E, resultado 0",
+          "Correta": false,
+          "Explicacao": "O símbolo '+' representa o conectivo OU, não E. Além disso, o resultado de 1+0 é 1."
+        },
+        {
+          "Texto": "OU, resultado 0",
+          "Correta": false,
+          "Explicacao": "O resultado da operação OU com pelo menos uma entrada verdadeira (1) é sempre verdadeiro (1)."
+        },
+        {
+          "Texto": "NÃO, resultado 1",
+          "Correta": false,
+          "Explicacao": "O símbolo '+' não representa a negação (NÃO). Ele representa o conectivo OU."
+        }
+      ]
     }
   },
-  {
-    "Codigo": "DB003",
-    "Topico": "Banco de Dados",
-    "Subtopico": "Chaves Primárias",
-    "Atividade": "Audio",
-    "Conteudo": "Importância da chave primária na integridade dos dados.",
-    "Detalhes": {
-      "Audio": {
-        "Titulo": "Chaves Primárias - conversa",
-        "Dialogo": [
-          {"Personagem": "Ana", "Fala": "Você sabe por que usamos chaves primárias?"},
-          {"Personagem": "Carlos", "Fala": "Acredito que seja para identificar registros unicamente, certo?"},
-          {"Personagem": "Ana", "Fala": "Exato. Elas garantem unicidade e facilitam relacionamentos entre tabelas."}
-        ]
-      }
+  "Materia": "Matemática"
+},
+{
+  "_id": {
+    "$oid": "690138da283e50845b39f995"
+  },
+  "Codigo": "ALGBOO003",
+  "Topico": "Álgebra Booleana",
+  "Subtopico": "Operações Booleanas - E (*)",
+  "Atividade": "Quiz",
+  "Conteudo": "A operação '*' na Álgebra Booleana é equivalente a qual conectivo lógico? E qual o resultado para as entradas 1*0? Dica: 'E' exige que todas as condições sejam verdadeiras para o resultado ser verdadeiro.",
+  "Detalhes": {
+    "Quiz": {
+      "Pergunta": "Qual conectivo lógico é representado por '*' e qual o resultado de 1*0?",
+      "Alternativas": [
+        {
+          "Texto": "E, resultado 0",
+          "Correta": true,
+          "Explicacao": "O símbolo '*' representa o conectivo lógico E. Para que o resultado seja verdadeiro (1), todas as entradas precisam ser verdadeiras. Como uma das entradas é 0, o resultado é 0."
+        },
+        {
+          "Texto": "OU, resultado 1",
+          "Correta": false,
+          "Explicacao": "O símbolo '*' representa o conectivo E, não OU. Além disso, o resultado de 1*0 é 0."
+        },
+        {
+          "Texto": "E, resultado 1",
+          "Correta": false,
+          "Explicacao": "O conectivo E só resulta em 1 se todas as entradas forem 1. Como uma entrada é 0, o resultado é 0."
+        },
+        {
+          "Texto": "NÃO, resultado 0",
+          "Correta": false,
+          "Explicacao": "O símbolo '*' representa o conectivo E, não NÃO."
+        }
+      ]
     }
   },
-  {
-    "Codigo": "DB004",
-    "Topico": "Banco de Dados",
-    "Subtopico": "Terminologia SQL",
-    "Atividade": "CacaPalavras",
-    "Conteudo": "Termos chave utilizados em SQL.",
-    "Detalhes": {
-      "CacaPalavras": {
-        "Tema": "Termos SQL",
-        "Palavras": ["VIEW", "PROCEDURE", "TRIGGER", "SELECT"]
-      }
+  "Materia": "Matemática"
+},
+{
+  "_id": {
+    "$oid": "690138da283e50845b39f997"
+  },
+  "Codigo": "ALGBOO004",
+  "Topico": "Álgebra Booleana",
+  "Subtopico": "Operações Booleanas - Negação (barra)",
+  "Atividade": "Flashcard",
+  "Conteudo": "O que a operação de complementação (representada por uma barra sobre a variável) faz com o valor booleano original? Pense no oposto, como em uma música com o ritmo invertido.",
+  "Detalhes": {
+    "Flashcard": {
+      "Frente": "O que a operação de complementação (barra) faz com um valor booleano?",
+      "Verso": "A complementação inverte o valor booleano: 0 se torna 1 e 1 se torna 0."
     }
-  }
-]
+  },
+  "Materia": "Matemática"
+},
+{
+  "_id": {
+    "$oid": "690138da283e50845b39f999"
+  },
+  "Codigo": "ALGBOO005",
+  "Topico": "Álgebra Booleana",
+  "Subtopico": "Hierarquia de Operações",
+  "Atividade": "Quiz",
+  "Conteudo": "Na expressão booleana A + B * C, qual operação você resolveria primeiro? Lembre-se da ordem de precedência, assim como em uma playlist de música onde você escolhe a ordem das faixas.",
+  "Detalhes": {
+    "Quiz": {
+      "Pergunta": "Na expressão booleana A + B * C, qual operação tem precedência?",
+      "Alternativas": [
+        {
+          "Texto": "Multiplicação (B * C)",
+          "Correta": true,
+          "Explicacao": "Na Álgebra Booleana, a multiplicação (*) tem precedência sobre a adição (+), assim como em aritmética comum. Portanto, B * C é resolvido primeiro."
+        },
+        {
+          "Texto": "Adição (A + B)",
+          "Correta": false,
+          "Explicacao": "A adição (+) tem menor precedência que a multiplicação (*) na Álgebra Booleana."
+        },
+        {
+          "Texto": "Ambas ao mesmo tempo",
+          "Correta": false,
+          "Explicacao": "As operações booleanas seguem uma ordem de precedência definida, não são resolvidas simultaneamente sem critério."
+        },
+        {
+          "Texto": "Depende dos valores de A, B e C",
+          "Correta": false,
+          "Explicacao": "A ordem de precedência das operações é fixa e não depende dos valores das variáveis."
+        }
+      ]
+    }
+  },
+  "Materia": "Matemática"
+},
+{
+  "_id": {
+    "$oid": "690138da283e50845b39f99b"
+  },
+  "Codigo": "ALGBOO006",
+  "Topico": "Álgebra Booleana",
+  "Subtopico": "Propriedades - Comutatividade",
+  "Atividade": "Flashcard",
+  "Conteudo": "Explique a propriedade comutativa na Álgebra Booleana. Como ela se aplica às operações de soma (+) e multiplicação (*)? É como dizer que a ordem dos fatores (ou termos) não altera o produto (ou a soma).",
+  "Detalhes": {
+    "Flashcard": {
+      "Frente": "O que diz a propriedade comutativa na Álgebra Booleana?",
+      "Verso": "A propriedade comutativa afirma que a ordem dos operandos não altera o resultado. Para adição: A + B = B + A. Para multiplicação: A * B = B * A."
+    }
+  },
+  "Materia": "Matemática"
+},
+{
+  "_id": {
+    "$oid": "690138da283e50845b39f99d"
+  },
+  "Codigo": "ALGBOO007",
+  "Topico": "Álgebra Booleana",
+  "Subtopico": "Propriedades - Idempotência",
+  "Atividade": "Quiz",
+  "Conteudo": "Qual é o resultado de A + A na Álgebra Booleana, de acordo com a propriedade idempotente? E A * A? Pense em algo que, repetido, não muda seu efeito, como um refrão de música que se repete.",
+  "Detalhes": {
+    "Quiz": {
+      "Pergunta": "Qual o resultado de A + A e A * A pela propriedade idempotente?",
+      "Alternativas": [
+        {
+          "Texto": "A + A = A e A * A = A",
+          "Correta": true,
+          "Explicacao": "A propriedade idempotente estabelece que a operação de um elemento com ele mesmo resulta no próprio elemento. Assim, A + A = A e A * A = A."
+        },
+        {
+          "Texto": "A + A = 1 e A * A = 0",
+          "Correta": false,
+          "Explicacao": "Esta seria a resposta se a operação fosse diferente ou se A tivesse um valor específico e fixo que levasse a esses resultados, mas não é a regra geral da idempotência."
+        },
+        {
+          "Texto": "A + A = 0 e A * A = 1",
+          "Correta": false,
+          "Explicacao": "Os resultados 0 e 1 dependem dos valores de A nas operações e não da propriedade idempotente em si."
+        },
+        {
+          "Texto": "A + A = A e A * A = 1",
+          "Correta": false,
+          "Explicacao": "A propriedade idempotente se aplica igualmente à multiplicação, resultando em A * A = A."
+        }
+      ]
+    }
+  },
+  "Materia": "Matemática"
+},
+{
+  "_id": {
+    "$oid": "690138da283e50845b39f99f"
+  },
+  "Codigo": "ALGBOO008",
+  "Topico": "Álgebra Booleana",
+  "Subtopico": "Funções Booleanas",
+  "Atividade": "CacaPalavras",
+  "Conteudo": "Encontre na caça-palavras os termos relacionados à definição de uma função booleana: mapeamento, valores, binários, entrada, saída, n-uplas, conjunto. (Imagine que cada palavra encontrada é um bit que forma um dado em um sistema tecnológico).",
+  "Detalhes": {
+    "CacaPalavras": {
+      "Tema": "Funções Booleanas",
+      "Palavras": [
+        "Mapeamento",
+        "Valores",
+        "Binarios",
+        "Entrada",
+        "Saida",
+        "Nuplas",
+        "Conjunto"
+      ]
+    }
+  },
+  "Materia": "Matemática"
+},
+{
+  "_id": {
+    "$oid": "690138da283e50845b39f9a1"
+  },
+  "Codigo": "ALGBOO009",
+  "Topico": "Álgebra Booleana",
+  "Subtopico": "Exemplo de Função Booleana",
+  "Atividade": "Quiz",
+  "Conteudo": "Dado a função booleana f(a, b) = a + a*b, qual será a saída (0 ou 1) quando a=1 e b=0? Use as regras de operação e hierarquia para resolver. É como decifrar o resultado de uma sequência em um programa de computador.",
+  "Detalhes": {
+    "Quiz": {
+      "Pergunta": "Para f(a, b) = a + a*b, qual o resultado se a=1 e b=0?",
+      "Alternativas": [
+        {
+          "Texto": "1",
+          "Correta": true,
+          "Explicacao": "Primeiro, resolvemos a multiplicação: a*b = 1*0 = 0. Depois, a adição: a + (a*b) = 1 + 0 = 1. Portanto, f(1, 0) = 1."
+        },
+        {
+          "Texto": "0",
+          "Correta": false,
+          "Explicacao": "O resultado da operação 1+0 é 1, não 0. A multiplicação 1*0 resulta em 0, mas a soma subsequente altera o resultado final."
+        },
+        {
+          "Texto": "Indeterminado",
+          "Correta": false,
+          "Explicacao": "A função booleana é bem definida e podemos determinar o resultado com os valores fornecidos."
+        },
+        {
+          "Texto": "Ambos 0 e 1",
+          "Correta": false,
+          "Explicacao": "Uma função booleana terá uma única saída para um conjunto específico de entradas."
+        }
+      ]
+    }
+  },
+  "Materia": "Matemática"
+},
+{
+  "_id": {
+    "$oid": "69013908283e50845b39f9a3"
+  },
+  "Codigo": "ALGBOO010",
+  "Topico": "Álgebra Booleana",
+  "Subtopico": "Funções Booleanas e Circuitos Digitais",
+  "Atividade": "Audio",
+  "Conteudo": "Ouça este áudio para entender como as funções booleanas são a base para a construção de circuitos digitais, que são os 'cérebros' dos dispositivos tecnológicos que você usa. Como as operações lógicas determinam o fluxo de informação?",
+  "Detalhes": {
+    "Audio": {
+      "Titulo": "Funções Booleanas e Circuitos Digitais",
+      "Dialogo": [
+        {
+          "Personagem": "Ana",
+          "Fala": "Oi! Você já parou para pensar em como seu celular ou computador funcionam? Por trás de toda essa tecnologia, existem os circuitos digitais."
+        },
+        {
+          "Personagem": "Carlos",
+          "Fala": "Circuitos digitais? Isso parece complicado. O que eles têm a ver com a Álgebra Booleana que estamos aprendendo?"
+        },
+        {
+          "Personagem": "Ana",
+          "Fala": "Na verdade, eles são totalmente baseados nela! As funções booleanas, com suas operações lógicas como E, OU e NÃO, são como os blocos de construção desses circuitos. Cada operação lógica corresponde a um componente eletrônico simples, como uma porta lógica."
+        },
+        {
+          "Personagem": "Carlos",
+          "Fala": "Entendi! Então, quando combinamos essas portas lógicas seguindo as regras das funções booleanas, criamos caminhos para a informação passar, certo? Como se fossem estradas digitais controladas por interruptores (0s e 1s)?"
+        },
+        {
+          "Personagem": "Ana",
+          "Fala": "Exatamente! Essa combinação determina como os dados são processados, armazenados e como o dispositivo toma decisões. As funções booleanas, portanto, são o 'cérebro' por trás da lógica que faz a computação acontecer!"
+        }
+      ]
+    }
+  },
+  "AudioPath": "C:\\Users\\rafae\\OneDrive\\Documentos\\GitHub\\hack4edu_IFC\\ALGBOO010.wav",
+  "AudioStatus": "generated",
+  "Materia": "Matemática"
+},
+{
+  "_id": {
+    "$oid": "69013a7300027110c0be76ed"
+  },
+  "Codigo": "ESP001",
+  "Topico": "Espaço Amostral e Eventos",
+  "Subtopico": "Definição de Espaço Amostral",
+  "Atividade": "Flashcard",
+  "Conteudo": "O que é um espaço amostral em um experimento aleatório? Liste um exemplo com o lançamento de uma moeda duas vezes.",
+  "Detalhes": {
+    "Flashcard": {
+      "Frente": "O que é um espaço amostral (Ω) em um experimento aleatório?",
+      "Verso": "É o conjunto de todos os resultados possíveis de um experimento. Exemplo (moeda 2x): Ω = {CC, CK, KC, KK}"
+    }
+  },
+  "Materia": "Estatistica e Probabilidade"
+},
+{
+  "_id": {
+    "$oid": "69013a7300027110c0be76ef"
+  },
+  "Codigo": "ESP002",
+  "Topico": "Espaço Amostral e Eventos",
+  "Subtopico": "Enumeração de Elementos de Eventos",
+  "Atividade": "Quiz",
+  "Conteudo": "Ao lançar dois dados comuns, qual é o espaço amostral? Quantos resultados possíveis existem no total?",
+  "Detalhes": {
+    "Quiz": {
+      "Pergunta": "Ao lançar dois dados comuns, qual o número total de resultados possíveis no espaço amostral?",
+      "Alternativas": [
+        {
+          "Texto": "36",
+          "Correta": true,
+          "Explicacao": "Cada dado tem 6 faces, então são 6 * 6 = 36 combinações possíveis."
+        },
+        {
+          "Texto": "12",
+          "Correta": false,
+          "Explicacao": "12 seria a soma dos valores das faces, não o número de combinações."
+        },
+        {
+          "Texto": "6",
+          "Correta": false,
+          "Explicacao": "6 é o número de resultados para um único dado."
+        },
+        {
+          "Texto": "21",
+          "Correta": false,
+          "Explicacao": "21 é a soma dos números de 1 a 6, não o total de pares possíveis."
+        }
+      ]
+    }
+  },
+  "Materia": "Estatistica e Probabilidade"
+},
+{
+  "_id": {
+    "$oid": "69013a7300027110c0be76f1"
+  },
+  "Codigo": "ESP003",
+  "Topico": "Espaço Amostral e Eventos",
+  "Subtopico": "Tradução de Eventos para Linguagem de Conjuntos",
+  "Atividade": "Flashcard",
+  "Conteudo": "O que significa a expressão 'pelo menos um evento ocorre' em termos de operações de conjuntos? E 'nenhum evento ocorre'?",
+  "Detalhes": {
+    "Flashcard": {
+      "Frente": "O que significam 'pelo menos um evento ocorre' e 'nenhum evento ocorre' em teoria de conjuntos?",
+      "Verso": "'Pelo menos um ocorre' é a união (∪) dos eventos. 'Nenhum ocorre' é a interseção (∩) das complementares."
+    }
+  },
+  "Materia": "Estatistica e Probabilidade"
+},
+{
+  "_id": {
+    "$oid": "69013a7300027110c0be76f3"
+  },
+  "Codigo": "ESP004",
+  "Topico": "Espaço Amostral e Eventos",
+  "Subtopico": "Enumeração de Elementos de Eventos",
+  "Atividade": "CacaPalavras",
+  "Conteudo": "Encontre no caça-palavras os elementos do espaço amostral para o evento 'a soma dos resultados é 7' ao lançar dois dados. Palavras: UM, DOIS, TRES, QUATRO, CINCO, SEIS, ONZE, DOZE, SETE, UMTRÊS, DOISSEIS, CINCODOIS, QUATROQUATRO, TRÊSCINCO, SEISDOIS, UMDOIS, TRÊSSEIS, UMSEIS.",
+  "Detalhes": {
+    "CacaPalavras": {
+      "Tema": "Soma 7 em dois dados",
+      "Palavras": [
+        "UMSEIS",
+        "DOISCINCO",
+        "TRÊSQUATRO",
+        "QUATRTRES",
+        "CINCODOIS",
+        "SEISUM"
+      ]
+    }
+  },
+  "Materia": "Estatistica e Probabilidade"
+},
+{
+  "_id": {
+    "$oid": "69013a8e00027110c0be76f5"
+  },
+  "Codigo": "ESP005",
+  "Topico": "Espaço Amostral e Eventos",
+  "Subtopico": "Definição de Espaço Amostral",
+  "Atividade": "Audio",
+  "Conteudo": "Ouça a descrição de um experimento aleatório e identifique o espaço amostral (Ω) e o número de seus elementos. (Áudio: 'Imagine que você tem três botões de uma novela preferida, numerados de 1 a 3. Você aperta um botão de cada vez, e o experimento termina quando você aperta o botão 3. Qual o espaço amostral de resultados possíveis?')",
+  "Detalhes": {
+    "Audio": {
+      "Titulo": "Identificando o Espaço Amostral",
+      "Dialogo": [
+        {
+          "Personagem": "Professor",
+          "Fala": "Olá! Vamos analisar um experimento. Temos três botões numerados de 1 a 3. Apertamos um por vez até o botão 3 ser pressionado. Que resultados podemos obter?"
+        },
+        {
+          "Personagem": "Aluno",
+          "Fala": "Hmm... Se apertarmos o 1, depois o 2, e aí o 3, o experimento acaba. Então (1, 2, 3) é um resultado. E se apertarmos direto o 3? Seria só (3)?"
+        },
+        {
+          "Personagem": "Professor",
+          "Fala": "Exatamente! E se apertarmos o 1, e depois o 3? Seria (1, 3). Ou o 2 e depois o 3? Seria (2, 3). O espaço amostral Ω é {(3), (1,3), (2,3)}. Percebe que o experimento para assim que o 3 é apertado?"
+        }
+      ]
+    }
+  },
+  "AudioPath": "C:\\Users\\rafae\\OneDrive\\Documentos\\GitHub\\hack4edu_IFC\\ESP005.wav",
+  "AudioStatus": "generated",
+  "Materia": "Estatistica e Probabilidade"
+},
+{
+  "_id": {
+    "$oid": "69013a8e00027110c0be76f7"
+  },
+  "Codigo": "ESP006",
+  "Topico": "Espaço Amostral e Eventos",
+  "Subtopico": "Enumeração de Elementos de Eventos",
+  "Atividade": "Quiz",
+  "Conteudo": "Considere o lançamento de uma moeda honesta até que ocorra 'Cara' pela primeira vez. Qual dos seguintes conjuntos representa o espaço amostral? a) {C, K} b) {CC, CK, KC, KK} c) {C, KC, KKC, KKC, ...} d) {K, KK, KKK, ...}",
+  "Detalhes": {
+    "Quiz": {
+      "Pergunta": "Qual conjunto representa o espaço amostral ao lançar uma moeda até sair 'Cara' pela primeira vez?",
+      "Alternativas": [
+        {
+          "Texto": "{C, KC, KKC, KKKC, ...}",
+          "Correta": true,
+          "Explicacao": "O experimento termina na primeira Cara (C). Antes disso, podem vir várias Coroas (K)."
+        },
+        {
+          "Texto": "{C, K}",
+          "Correta": false,
+          "Explicacao": "Este conjunto representa o resultado de um único lançamento."
+        },
+        {
+          "Texto": "{CC, CK, KC, KK}",
+          "Correta": false,
+          "Explicacao": "Este é o espaço amostral para exatamente dois lançamentos."
+        },
+        {
+          "Texto": "{K, KK, KKK, ...}",
+          "Correta": false,
+          "Explicacao": "Este conjunto representa o caso em que 'Cara' nunca ocorre, o que não é o critério de parada do experimento."
+        }
+      ]
+    }
+  },
+  "Materia": "Estatistica e Probabilidade"
+},
+{
+  "_id": {
+    "$oid": "69013a8e00027110c0be76f9"
+  },
+  "Codigo": "ESP007",
+  "Topico": "Espaço Amostral e Eventos",
+  "Subtopico": "Tradução de Eventos para Linguagem de Conjuntos",
+  "Atividade": "Flashcard",
+  "Conteudo": "Em um experimento com eventos A e B, o que representa o evento 'A ocorre, mas B não ocorre' em notação de conjuntos?",
+  "Detalhes": {
+    "Flashcard": {
+      "Frente": "Como representar em notação de conjuntos o evento 'A ocorre, mas B não ocorre'?",
+      "Verso": "Isso é representado pela interseção de A com o complementar de B: A ∩ Bᶜ."
+    }
+  },
+  "Materia": "Estatistica e Probabilidade"
+},
+{
+  "_id": {
+    "$oid": "69013a8e00027110c0be76fb"
+  },
+  "Codigo": "ESP008",
+  "Topico": "Espaço Amostral e Eventos",
+  "Subtopico": "Enumeração de Elementos de Eventos",
+  "Atividade": "Quiz",
+  "Conteudo": "Ao jogar dois dados, qual evento corresponde ao conjunto {(1,1), (2,2), (3,3), (4,4), (5,5), (6,6)}? a) A soma é ímpar b) Os resultados são iguais c) A soma é menor que 5 d) Pelo menos um dado mostra 6",
+  "Detalhes": {
+    "Quiz": {
+      "Pergunta": "Qual evento é descrito pelo conjunto {(1,1), (2,2), (3,3), (4,4), (5,5), (6,6)} ao jogar dois dados?",
+      "Alternativas": [
+        {
+          "Texto": "Os resultados são iguais",
+          "Correta": true,
+          "Explicacao": "Em cada par (x, y), temos x = y."
+        },
+        {
+          "Texto": "A soma é ímpar",
+          "Correta": false,
+          "Explicacao": "A soma em todos esses pares é par (2, 4, 6, 8, 10, 12)."
+        },
+        {
+          "Texto": "A soma é menor que 5",
+          "Correta": false,
+          "Explicacao": "As somas são 2, 4, 6, 8, 10, 12. Apenas (1,1) e (2,2) satisfazem."
+        },
+        {
+          "Texto": "Pelo menos um dado mostra 6",
+          "Correta": false,
+          "Explicacao": "Apenas o par (6,6) tem um 6. Os outros pares não têm o número 6."
+        }
+      ]
+    }
+  },
+  "Materia": "Estatistica e Probabilidade"
+},
+{
+  "_id": {
+    "$oid": "69013a8e00027110c0be76fd"
+  },
+  "Codigo": "ESP009",
+  "Topico": "Espaço Amostral e Eventos",
+  "Subtopico": "Definição de Espaço Amostral",
+  "Atividade": "CacaPalavras",
+  "Conteudo": "Encontre no caça-palavras termos relacionados à definição de espaço amostral. Palavras: CONJUNTO, RESULTADOS, POSSIVEIS, EXPERIMENTO, AMOSTRAL, EVENTOS, Omega, COMPLETO.",
+  "Detalhes": {
+    "CacaPalavras": {
+      "Tema": "Definição de Espaço Amostral",
+      "Palavras": [
+        "CONJUNTO",
+        "RESULTADOS",
+        "POSSIVEIS",
+        "EXPERIMENTO",
+        "AMOSTRAL",
+        "EVENTOS",
+        "OMEGA",
+        "COMPLETO"
+      ]
+    }
+  },
+  "Materia": "Estatistica e Probabilidade"
+},
+{
+  "_id": {
+    "$oid": "69013a8e00027110c0be76ff"
+  },
+  "Codigo": "ESP010",
+  "Topico": "Espaço Amostral e Eventos",
+  "Subtopico": "Tradução de Eventos para Linguagem de Conjuntos",
+  "Atividade": "Quiz",
+  "Conteudo": "Em um teste de música com duas questões (A e B), se o evento X for 'acertar a questão A' e o evento Y for 'acertar a questão B', como você descreveria o evento '(A ∩ Bᶜ) ∪ (Aᶜ ∩ B)'?",
+  "Detalhes": {
+    "Quiz": {
+      "Pergunta": "Se A é acertar a questão A e B é acertar a questão B, o que representa o evento (A ∩ Bᶜ) ∪ (Aᶜ ∩ B)?",
+      "Alternativas": [
+        {
+          "Texto": "Acertar exatamente uma das questões",
+          "Correta": true,
+          "Explicacao": "A ∩ Bᶜ significa acertar A e errar B. Aᶜ ∩ B significa errar A e acertar B. A união deles é acertar exatamente uma."
+        },
+        {
+          "Texto": "Acertar ambas as questões",
+          "Correta": false,
+          "Explicacao": "Acertar ambas seria representado por A ∩ B."
+        },
+        {
+          "Texto": "Errar ambas as questões",
+          "Correta": false,
+          "Explicacao": "Errar ambas seria representado por Aᶜ ∩ Bᶜ."
+        },
+        {
+          "Texto": "Acertar pelo menos uma questão",
+          "Correta": false,
+          "Explicacao": "Acertar pelo menos uma seria representado por A ∪ B."
+        }
+      ]
+    }
+  },
+  "Materia": "Estatistica e Probabilidade"
+}]

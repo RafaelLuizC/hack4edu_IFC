@@ -11,9 +11,55 @@ from AI.gemini_audio import gera_audio_conversa
 # gosta de bicicletas, jogos de tabuleiro e tecnologia.
 # Prefere aprender por meio de exemplos práticos."""
 
-perfil_do_usuario ="""Vitória Pereira, tem 23 anos e quer aprender mais sobre Estatística e Probabilidade para se sair bem em suas aulas no IFC,
-gosta de novelas, música e tecnologia.
-"""
+perfil_usuario = [{"nome": "Rafael", "idade": 26, "interesses": ["bicicletas", "jogos de tabuleiro", "tecnologia"], "metodo_aprendizagem": "exemplos práticos"},
+                  {"nome": "Ana Maria", "idade": 34, "interesses": ["literatura", "arte", "viagens"], "metodo_aprendizagem": "Gosta de ouvir exemplos baseados em situações cotidianas."},]
+
+
+# Recebe o topico e gera as atividades para um determinado aluno.
+def gerar_tarefas_detalhadas(topico, materia, perfil_usuario):
+
+        trilha_aprendizado = generate(
+                                topico,
+                                prompt_trilha().replace("[SUBSTITUIR-PERFIL-USUARIO]",
+                                perfil_usuario).replace("[SUBSTITUIR-TEMA]",
+                                topico["Topico"]))
+        trilha_aprendizado = trata_json_resposta(trilha_aprendizado) # Converte a resposta em JSON.
+
+        #Salva a trilha de aprendizado no banco de dados.
+        for trilha in trilha_aprendizado: #Para cada item na trilha de aprendizado.
+                trilha["Materia"] = materia  # Adiciona o campo matéria ao item.
+                inserir_dados('trilhas_aprendizado', trilha)
+
+
+def gerar_atividades_detalhadas(trilha_aprendizado, materia, perfil_usuario):
+        print ("\nGerando atividades detalhadas...\n")
+        atividades = generate(str(trilha_aprendizado), prompt_atividades())
+        atividades = trata_json_resposta(atividades) # Converte a resposta em JSON.
+
+        # Salva as atividades detalhadas no banco de dados.
+        for atividade in atividades:
+                if (atividade["Atividade"]) == "Audio": # Se a atividade for de áudio, deve passar por um processo extra.
+                        print ("Gerando áudio para a atividade...")
+                        output_path = f"{atividade.get('Codigo','unknown')}.wav" # Define o nome do arquivo de áudio.
+                        try: # Gera o áudio usando a função do gemini_audio.py
+                                gera_audio_conversa(
+                                        prompt="Uma conversa tranquila e divertida entre professor e aluno.",
+                                        json_audio=atividade,
+                                        output_filepath=output_path
+                                )
+                                # Adiciona o caminho do áudio ao objeto antes de salvar no banco.
+                                atividade["AudioPath"] = os.path.abspath(output_path)
+                                atividade["AudioStatus"] = "generated"                
+                        
+                        # Registra erro no objeto para depuração, mas continua a inserção no banco.
+                        except Exception as e:
+                                # Modificar no Frontend depois, mas em caso de erro, é possivel usar a transcrição do navegador.
+                                atividade["AudioStatus"] = "error"
+                                atividade["AudioError"] = str(e) # Adiciona a mensagem de erro.
+                
+                # Nenhuma das outras atividades precisam de processamento extra, então insere direto no banco.
+                atividade["Materia"] = materia  # Adiciona o campo matéria ao item.
+                inserir_dados('atividades_detalhadas', atividade)
 
 def pipeline_tarefas(materia, pdf_referencia, perfil_usuario):
 
@@ -41,7 +87,7 @@ def pipeline_tarefas(materia, pdf_referencia, perfil_usuario):
         inserir_dados('atividades_parser', item)
 
     # Aqui eu estou considerando somente o primeiro tópico gerado, mas o ideal seria criar um algoritmo para selecionar o melhor tópico.
-    item = topicos_gerados[0] 
+    item = topicos_gerados[0]
     print (f"O item 0 é: {item}")
 
     # --- Gerar Trilha de Aprendizado ---
@@ -52,7 +98,7 @@ def pipeline_tarefas(materia, pdf_referencia, perfil_usuario):
     # Aqui ele recebe o um dos topicos gerados.
     # O perfil do usuário é inserido no prompt para personalizar a trilha de aprendizado.
     # E o tema é o tópico específico que está sendo abordado.
-    trilha_aprendizado = generate(topicos_gerados, prompt_trilha().replace("[SUBSTITUIR-PERFIL-USUARIO]", perfil_usuario).replace("[SUBSTITUIR-TEMA]", item["Topico"]))
+    trilha_aprendizado = generate(item, prompt_trilha().replace("[SUBSTITUIR-PERFIL-USUARIO]", perfil_usuario).replace("[SUBSTITUIR-TEMA]", item["Topico"]))
     trilha_aprendizado = trata_json_resposta(trilha_aprendizado) # Converte a resposta em JSON.
 
     #Salva a trilha de aprendizado no banco de dados.
@@ -97,10 +143,12 @@ def pipeline_tarefas(materia, pdf_referencia, perfil_usuario):
 if __name__ == "__main__":
 
   # PDF Path é o caminho do PDF que será processado.
-  pdf_path = "pdf_sample/Atividade3Matematica.pdf"
+  pdf_path = "pdf_sample/Lista3Estatistica.pdf"
   
   # Ele ta salvando no MongoDB, para salvar, é necessario verificar a pasta databases/bd_utils.py.
   # Nele tem a função inserir_logs, que salva os dados no MongoDB, se quiser modificar os dados de conexão, é só alterar lá.
 
   # Não retorna nada, apenas executa a pipeline de tarefas.
-  pipeline_tarefas("Matemática",pdf_path, perfil_do_usuario)
+  for usuario in perfil_usuario:
+        perfil_formatado = f"{usuario['nome']}, tem {usuario['idade']} anos e quer aprender mais sobre Estatística e Probabilidade para se sair bem em suas aulas no IFC, gosta de {', '.join(usuario['interesses'])}. Prefere aprender por meio de {usuario['metodo_aprendizagem']}."
+        pipeline_tarefas("Estatistica e Probabilidade",pdf_path, perfil_formatado)

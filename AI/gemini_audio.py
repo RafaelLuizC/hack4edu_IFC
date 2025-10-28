@@ -12,8 +12,8 @@ def gera_audio_conversa(prompt, json_audio, output_filepath):
 
     dirpath = "audios" # Define o diretório padrão como 'audios' se nenhum diretório for especificado.
     os.makedirs(dirpath, exist_ok=True) 
-    
-    output_filepath = f"{dirpath}/{output_filepath}" # Atualiza o caminho do arquivo de saída para incluir o diretório.
+
+    output_filepath = f"{dirpath}/static/{output_filepath}" # Atualiza o caminho do arquivo de saída para incluir o diretório.
 
     dialogo = json_audio['Detalhes']
     dialogo = dialogo['Audio']['Dialogo']
