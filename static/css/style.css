@@ -1,0 +1,284 @@
+:root:has(#activity-container) {
+  --nav-height: 60px;
+}
+
+body:has(#activity-container) .topbar nav {
+  background: transparent;
+  padding: 6px;
+}
+
+body:has(#activity-container)  .topbar nav button, body:has(#activity-container)  .topbar nav a {
+  color: var(--primary-color);
+}
+
+/* ATIVIDADE */
+
+#activity-container {
+  min-height: calc(100% - var(--nav-height));
+  max-width: 900px;
+  padding: 12px 18px;
+  overflow-x: auto;
+}
+
+body:has(#activity-container) {
+  background: var(--blue-color-1);
+}
+
+body:has(#activity-container) .nav-button {
+  width: auto;
+  gap: 6px;
+}
+
+body:has(#activity-container) .nav-button svg {
+  width: auto;
+  gap: 6px;
+  width: 14px;
+  height: 14px;
+}
+
+#activity-container h1 {
+  font-size: 16px;
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+#activity-container p {
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0;
+}
+
+.activity-button {
+  position: absolute;
+  bottom: 36px;
+  left: 50%;
+  border-radius: 24px;
+  transform: translateX(-50%);
+  background-color: var(--secondary-color);
+  color: var(--light-color);
+}
+
+/* ----- */
+/* Card */
+/* ---- */
+
+.card {
+  background: var(--light-color);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 6px 18px rgba(33,49,58,0.06);
+  cursor: pointer;
+  transition: transform .14s;
+}
+
+.card:hover {
+  transform:translateY(-6px)
+}
+
+.card .meta {
+  font-size: 12px;
+  color: var(--dark-color);
+  margin-bottom: 8px;
+}
+
+.card h3 {
+  margin: 0;
+}
+
+.card p {
+  margin: 8px 0 0 0;
+  color: var(--dark-color);
+  font-size: 14px;
+}
+
+.back {
+  display: inline-block;
+  margin-bottom: 12px;
+  color: var(--dark-color);
+}
+
+/* --------- */
+/* Flashcard */
+/* --------- */
+
+body:has(#activity-container .flashcard) {
+  background: var(--primary-color);
+}
+
+body:has(#activity-container .flashcard)  .topbar nav button, body:has(#activity-container .flashcard)  .topbar nav a {
+  color: var(--light-color);
+}
+
+body:has(.flashcard) h1 {
+  color: var(--light-color);
+}
+
+body:has(.flashcard) .activity-box {
+  position: relative;
+}
+
+.flashcard {
+  width: 100%;
+  height: 260px;
+  position: relative;
+}
+
+.card-face {
+  position:absolute;
+  backface-visibility:hidden;
+  transition: transform .6s;
+  height: 100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background-color: var(--light-color);
+  border-radius: 14px;
+  text-align: center;
+}
+
+.front {
+  transform: rotateY(0deg);
+}
+
+.back-face {
+  transform: rotateY(180deg);
+}
+
+.flipped .front {
+  transform: rotateY(-180deg);
+}
+
+.flipped .back-face {
+  transform: rotateY(0deg);
+}
+
+.flip-btn {
+  position: absolute;
+  bottom: -12px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100%);
+  background: var(--light-color);
+  color: var(--primary-color);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 24px;
+  cursor: pointer;
+}
+
+/* ----- */
+/* Audio */
+/* ----- */
+
+.audio-player {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:12px;
+  padding:30px;
+}
+
+.play-btn {
+  width:96px;
+  height:96px;
+  border-radius:999px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:none;
+  background:var(--primary-color);
+  color:white;
+  font-size:22px;
+  cursor:pointer;
+}
+
+/* ---- */
+/* Quiz */
+/* ---- */
+
+body:has(.quiz-opts) .continue-btn.disabled {
+  display: none;
+}
+
+.quiz-opts {
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  margin-top:12px;
+}
+
+.opt {
+  padding:12px;
+  border-radius:999px;
+  background:#f2faf4;
+  border:1px solid rgba(97,116,119,0.06);
+  cursor:pointer;
+}
+
+.opt.selected, .opt.correct, .opt.wrong {
+  color: var(--light-color);
+}
+
+.opt.selected {
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.opt.correct {
+  background: var(--correct-color);
+  border-color: var(--correct-color);
+}
+
+.opt.wrong {
+  background: var(--wrong-color);
+  border-color: var(--wrong-color);
+}
+
+/* ------------- */
+/* Caça-Palavras */
+/* ------------- */
+
+.wordgrid {
+  display:grid;
+  gap:4px;
+  justify-content:center;
+  margin-top:12px;
+  scale: 0.9;
+}
+
+@media (min-width: 576px) {
+  .wordgrid {
+    scale: 1;
+  }
+}
+
+.grid-cell {
+  width:36px;
+  height:36px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:6px;
+  background:#fff;
+  border:1px solid #e6f1ec;
+}
+
+/* -------- */
+/* Feedback */
+/* -------- */
+
+.feedback {
+  margin-top:12px;
+  font-weight:600
+}
+
+@media (max-width: 600px) {
+  .card {
+    padding:12px
+  }
+
+  .flashcard {
+    height:220px
+  }
+}
