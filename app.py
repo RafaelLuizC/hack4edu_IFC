@@ -1,5 +1,5 @@
 from flask import Flask, render_template, send_from_directory, jsonify
-from databases.bd_utils import get_colecao
+#from databases.bd_utils import get_colecao
 import json
 
 app = Flask(__name__)
