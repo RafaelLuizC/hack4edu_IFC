@@ -1,141 +1,62 @@
-:root {
-  --primary-color:#0267C1;
-  --primary-color-light: #0075C4;
-  --primary-color-extra-light: rgb(69, 168, 255);
-  --secondary-color: #FB8B24;
-  --light-color:#FFFFFF;
-  --dark-color:#4D4D4D;
-  --dark-gray-color: #999999;
-  --gray-color: #CCCCCC;
-  --light-gray-color: #E6E6E6;
-  --correct-color: #008148;
-  --wrong-color: #B1061D;
-  --border-radius: 20px;
+:root:has(#activity-container) {
+  --nav-height: 60px;
 }
 
-* {
-  box-sizing: border-box;
-}
-
-body {
-  height: 100vh;
-  font-family: 'Poppins', 'system-ui', 'Arial', 'sans-serif';
-  background: var(--light-color);
-  color: var(--dark-color);
-  margin: 0;
-  padding: 0;
-}
-
-.app {
-  height: 100%;
-  margin: 0 auto;
-}
-
-button {
-  font-family: 'Poppins';
-}
-
-.container {
-  padding: 0 18px;
-  max-width: 900px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-header .container {
-  text-align: center;
-}
-
-.btn {
-  font-weight: 600;
-  padding: 8px 24px;
-}
-
-/* ------ */
-/* NAVBAR */
-/* ------ */
-
-/* .topbar nav {
-
-} */
-
-.topbar nav {
-  padding: 24px 6px;
-  background: var(--primary-color);
-  border-radius: 0 0 var(--border-radius) var(--border-radius);
-}
-
-.topbar nav ul {
-  list-style: none;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0;
-  margin: 0;
-}
-
-.topbar nav button, .topbar nav a {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--light-color);
-  border: none;
+body:has(#activity-container) .topbar nav {
   background: transparent;
-  padding: 0;
+  padding: 6px;
 }
 
-.nav-button {
-  width: 48px;
-  height: 48px;
-}
-
-.nav-button svg {
-  width: 20px;
-  height: 20px;
+body:has(#activity-container)  .topbar nav button, body:has(#activity-container)  .topbar nav a {
+  color: var(--primary-color);
 }
 
 /* ATIVIDADE */
 
 #activity-container {
+  min-height: calc(100% - var(--nav-height));
   max-width: 900px;
-  padding: 0 18px;
+  padding: 12px 18px;
+  overflow-x: auto;
 }
 
-#activity-container h2 {
-  font-size: 18px;
+body:has(#activity-container) {
+  background: var(--blue-color-1);
+}
+
+body:has(#activity-container) .nav-button {
+  width: auto;
+  gap: 6px;
+}
+
+body:has(#activity-container) .nav-button svg {
+  width: auto;
+  gap: 6px;
+  width: 14px;
+  height: 14px;
+}
+
+#activity-container h1 {
+  font-size: 16px;
   text-align: center;
   margin-bottom: 36px;
 }
 
-body:has(.flashcard) #activity-container h2 {
-  color: var(--light-color);
+#activity-container p {
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0;
 }
 
-.continue-btn {
+.activity-button {
   position: absolute;
   bottom: 36px;
   left: 50%;
+  border-radius: 24px;
   transform: translateX(-50%);
   background-color: var(--secondary-color);
-  border-radius: 24px;
-  border: none;
   color: var(--light-color);
-}
-
-.subtitle {
-  margin:0;
-  color:var(--dark-color);
-}
-
-.lesson-grid {
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:16px;
-  margin-top:20px;
-}
-
-.activity-box {
-  position: relative;
 }
 
 /* ----- */
@@ -181,8 +102,20 @@ body:has(.flashcard) #activity-container h2 {
 /* Flashcard */
 /* --------- */
 
-body:has(.flashcard) {
+body:has(#activity-container .flashcard) {
   background: var(--primary-color);
+}
+
+body:has(#activity-container .flashcard)  .topbar nav button, body:has(#activity-container .flashcard)  .topbar nav a {
+  color: var(--light-color);
+}
+
+body:has(.flashcard) h1 {
+  color: var(--light-color);
+}
+
+body:has(.flashcard) .activity-box {
+  position: relative;
 }
 
 .flashcard {
@@ -264,6 +197,10 @@ body:has(.flashcard) {
 /* Quiz */
 /* ---- */
 
+body:has(.quiz-opts) .continue-btn.disabled {
+  display: none;
+}
+
 .quiz-opts {
   display:flex;
   flex-direction:column;
@@ -279,16 +216,23 @@ body:has(.flashcard) {
   cursor:pointer;
 }
 
-.opt.correct {
-  background:#008148;
-  border-color:#008148;
+.opt.selected, .opt.correct, .opt.wrong {
   color: var(--light-color);
 }
 
+.opt.selected {
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.opt.correct {
+  background: var(--correct-color);
+  border-color: var(--correct-color);
+}
+
 .opt.wrong {
-  background:#B1061D;
-  border-color:#B1061D;
-  color: var(--light-color);
+  background: var(--wrong-color);
+  border-color: var(--wrong-color);
 }
 
 /* ------------- */
@@ -329,7 +273,7 @@ body:has(.flashcard) {
   font-weight:600
 }
 
-@media (max-width:600px) {
+@media (max-width: 600px) {
   .card {
     padding:12px
   }

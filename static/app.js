@@ -28,20 +28,13 @@ async function renderIndex(){
     grupos[m].push(item);
   });
 
-  ordem.forEach(materia=>{
+  ordem.forEach(materia => {
     const box = el('section','subject-box');
     box.append(el('h2',null,materia));
     const sub = el('div','subject-list');
     let topics = [];
 
     grupos[materia].forEach(item => {
-
-      // Lista de atividades da seção.
-      // const row = el('div','mat-row');
-      // const title = el('div','mat-meta', `${item.Codigo} • ${item.Atividade} • ${item.Topico} — ${item.Subtopico}`);
-      // row.append(title);
-      // sub.append(row);
-
       if (!topics.includes(item.Topico)) {
         topics.push(item.Topico);
       }
@@ -78,34 +71,52 @@ async function renderIndex(){
 // --- ACTIVITY (renderização única por atividade, gerencia sequência e Continue) ---
 async function renderActivityPage(codigo){
   const container = document.getElementById('activity-container');
-  if(!container) return;
+
+  if (!container) {
+    return;
+  }
 
   const trilha = await loadTrilha();
+
   // lista de atividades da mesma matéria em ordem de aparição no JSON
-  const current = trilha.find(x=>x.Codigo === codigo);
-  if(!current){ container.append(el('p',null,'Atividade não encontrada.')); return }
+  const current = trilha.find(x => x.Codigo === codigo);
+
+  if (!current) {
+    container.append(el('p',null,'Atividade não encontrada.'));
+    return;
+  }
+
   const materia = current.Materia || 'Geral';
-  const grupo = trilha.filter(x=> (x.Materia||'Geral') === materia);
-  const index = grupo.findIndex(x=>x.Codigo === codigo);
+  const grupo = trilha.filter(x => (x.Materia || 'Geral') === materia);
+  const index = grupo.findIndex(x => x.Codigo === codigo);
 
   // estado de sequência: armazenado em sessionStorage por matéria
   const stateKey = 'trilha_state_' + materia;
   let state = JSON.parse(sessionStorage.getItem(stateKey) || '{}');
-  if(!state.startTime){ state.startTime = Date.now(); state.errors = 0; state.completed = 0; state.total = grupo.length; sessionStorage.setItem(stateKey, JSON.stringify(state)); }
+
+  if (!state.startTime) {
+    state.startTime = Date.now();
+    state.errors = 0;
+    state.completed = 0;
+    state.total = grupo.length; 
+    sessionStorage.setItem(stateKey, JSON.stringify(state)); 
+  }
 
   // UI base
   container.innerHTML = '';
-  const title = el('h2',null, `${current.Topico} — ${current.Subtopico}`);
+  const title = el('h1',null, 'Responda a questão:');
   container.append(title);
 
   const activityBox = el('div','activity-box');
   container.append(activityBox);
 
-  const continueBtn = el('button','continue-btn disabled btn','Continuar');
-  continueBtn.disabled = true; continueBtn.style.opacity = '0.5';
-  continueBtn.onclick = ()=>{
+  const continueBtn = el('button','continue-btn activity-button disabled btn','Continuar');
+  continueBtn.disabled = true;
+  continueBtn.style.opacity = '0.5';
+
+  continueBtn.onclick = ()=> {
     // marcar concluído e navegar ou finalizar
-    state.completed = (state.completed||0) + 1;
+    state.completed = (state.completed || 0) + 1;
     sessionStorage.setItem(stateKey, JSON.stringify(state));
     if(index < grupo.length - 1){
       const next = grupo[index+1];
@@ -113,11 +124,14 @@ async function renderActivityPage(codigo){
     } else {
       showSummary(stateKey);
     }
-  };
+  }
+
   container.append(continueBtn);
 
   function enableContinue(){
-    continueBtn.disabled = false; continueBtn.classList.remove('disabled'); continueBtn.style.opacity = '1';
+    continueBtn.disabled = false;
+    continueBtn.classList.remove('disabled');
+    continueBtn.style.opacity = '1';
   }
 
   function addError(){
@@ -126,7 +140,7 @@ async function renderActivityPage(codigo){
   }
 
   // Render específico por tipo
-  if(current.Atividade === 'Flashcard'){
+  if (current.Atividade === 'Flashcard') {
     const card = el('div','flashcard');
     const faceFront = document.createElement('div');
     faceFront.className='card-face front';
@@ -139,50 +153,63 @@ async function renderActivityPage(codigo){
 
     btn.onclick = () => {
       card.classList.toggle('flipped');
-      // se girou (mostrar verso), considera completado
-      if(card.classList.contains('flipped')) enableContinue();
-    };
+
+      if (card.classList.contains('flipped')) {
+        enableContinue();
+      }
+    }
+
     activityBox.append(card, btn);
     return;
   }
 
   if(current.Atividade === 'Quiz'){
-    const q = current.Detalhes.Quiz;
-    activityBox.append(el('p',null,q.Pergunta));
+    const quiz = current.Detalhes.Quiz;
+    const verifyButton = el('button','verificar-btn activity-button btn','Verificar');
+    verifyButton.id = 'verificar-btn';
+    verifyButton.disabled = true;
+    verifyButton.style.opacity = '0.6';
+
     const opts = el('div','quiz-opts');
     let selectedIdx = null;
-    q.Alternativas.forEach((alt, idx)=>{
-      const o = el('div','opt', alt.Texto);
-      o.onclick = ()=>{
-        // seleção visual
-        Array.from(opts.children).forEach(ch=>ch.classList.remove('selected'));
-        o.classList.add('selected');
+
+    quiz.Alternativas.forEach((alt, idx)=>{
+      const option = el('div','opt', alt.Texto);
+      
+      option.onclick = () => {
+        Array.from(opts.children).forEach(ch => ch.classList.remove('selected'));
+        option.classList.add('selected');
         selectedIdx = idx;
-        // mostrar botão verificar (se não existe)
-        if(!document.getElementById('verificar-btn')){
-          const vbtn = el('button','verificar-btn btn','Verificar');
-          vbtn.id = 'verificar-btn';
-          vbtn.onclick = ()=>{
-            const altSel = q.Alternativas[selectedIdx];
-            if(altSel.Correta){
-              o.classList.add('correct');
-              activityBox.append(el('div','feedback','Correto! ' + (altSel.Explicacao||'')));
-            } else {
-              o.classList.add('wrong');
-              activityBox.append(el('div','feedback','Incorreto. ' + (altSel.Explicacao||'')));
-              addError();
-            }
-            // habilita continuar
-            enableContinue();
-            // desabilita verificação futura
-            vbtn.disabled = true; vbtn.style.opacity = '0.6';
-          };
-          activityBox.append(vbtn);
-        }
-      };
-      opts.append(o);
+        verifyButton.disabled = false;
+        verifyButton.style.opacity = '1';
+      }
+      
+      opts.append(option);
     });
+    
+    verifyButton.onclick = (event) => {
+      const altSel = quiz.Alternativas[selectedIdx];
+      const selectedOption = event.currentTarget.closest('#activity-container').querySelector('.selected');
+
+      if (altSel.Correta) {
+        selectedOption.classList.add('correct');
+        activityBox.append(el('div','feedback','Correto! ' + (altSel.Explicacao || '')));
+      
+      } else {
+        selectedOption.classList.add('wrong');
+        activityBox.append(el('div','feedback','Incorreto. ' + (altSel.Explicacao || '')));
+        addError();
+      }
+      // habilita continuar
+      enableContinue();
+      // desabilita verificação futura
+      verifyButton.disabled = true;
+      verifyButton.style.opacity = '0.6';
+    }
+    
+    activityBox.append(el('p',null,quiz.Pergunta));
     activityBox.append(opts);
+    activityBox.append(verifyButton);
     return;
   }
 
@@ -363,21 +390,41 @@ if (current.Atividade === 'CacaPalavras') {
         }
       });
       
-      // Efeitos hover
-      cell.addEventListener('mouseenter', () => {
-        if (!cell.classList.contains('found')) {
-          cell.style.background = '#e9ecef';
-          cell.style.transform = 'scale(1.05)';
-        }
-      });
-      
-      cell.addEventListener('mouseleave', () => {
-        if (!cell.classList.contains('found') && !cell.classList.contains('selected')) {
-          cell.style.background = '#f8f9fa';
-          cell.style.transform = 'scale(1)';
-        }
-      });
-      
+
+      // if (window.innerWidth < 992) {
+      //   cell.addEventListener('touchstart', () => {
+      //   if (!cell.classList.contains('found')) {
+      //       cell.style.background = '#e9ecef';
+      //       cell.style.transform = 'scale(1.05)';
+      //     }
+      //   });
+        
+      //   cell.addEventListener('touchmove', () => {
+      //     if (!cell.classList.contains('found') && !cell.classList.contains('selected')) {
+      //       cell.style.background = '#f8f9fa';
+      //       cell.style.transform = 'scale(1)';
+      //     }
+      //   });
+
+      // } else {
+        // Efeitos hover
+        cell.addEventListener('mouseenter', () => {
+          if (!cell.classList.contains('found')) {
+            cell.style.background = '#e9ecef';
+            cell.style.transform = 'scale(1.05)';
+          }
+        });
+        
+        cell.addEventListener('mouseleave', () => {
+          if (!cell.classList.contains('found') && !cell.classList.contains('selected')) {
+            cell.style.background = '#f8f9fa';
+            cell.style.transform = 'scale(1)';
+          }
+        });
+
+      // }
+
+
       gridEl.append(cell);
     }
   }
@@ -479,24 +526,32 @@ if (current.Atividade === 'CacaPalavras') {
     
     return false;
   }
+  
+  // Função auxiliar para obter o elemento na posição do toque
+  function getCellFromTouch(ev) {
+    const touch = ev.touches[0] || ev.changedTouches[0];
+    const element = document.elementFromPoint(touch.clientX, touch.clientY);
+    return element ? element.closest('.grid-cell') : null;
+  }
 
-  gridEl.addEventListener('mousedown', (ev) => {
-    const cell = ev.target.closest('.grid-cell');
+  // --- LÓGICA PRINCIPAL ---
+  function startSelection(ev) {
+    const cell = ev.type.startsWith('touch') ? getCellFromTouch(ev) : ev.target.closest('.grid-cell');
     if (!cell || cell.classList.contains('found')) return;
-    
+
     isSelecting = true;
     selectedCells = [cell];
     cell.classList.add('selected');
     cell.style.background = '#2196F3';
     cell.style.color = 'white';
-  });
+  }
 
-  gridEl.addEventListener('mouseover', (ev) => {
+  function continueSelection(ev) {
     if (!isSelecting) return;
-    
-    const cell = ev.target.closest('.grid-cell');
+
+    const cell = ev.type.startsWith('touch') ? getCellFromTouch(ev) : ev.target.closest('.grid-cell');
     if (!cell || cell.classList.contains('found') || selectedCells.includes(cell)) return;
-    
+
     const lastCell = selectedCells[selectedCells.length - 1];
     if (areCellsAdjacent(lastCell, cell) && isConsistentDirection(cell)) {
       selectedCells.push(cell);
@@ -504,28 +559,49 @@ if (current.Atividade === 'CacaPalavras') {
       cell.style.background = '#2196F3';
       cell.style.color = 'white';
     }
-  });
 
-  document.addEventListener('mouseup', () => {
+    // Impede o scroll da tela durante o toque
+    if (ev.cancelable) ev.preventDefault();
+  }
+
+  function endSelection() {
     if (isSelecting) {
       checkForWord();
       isSelecting = false;
     }
-  });
+  }
 
-  document.addEventListener('mousedown', (ev) => {
-    if (!ev.target.closest('.wordgrid')) {
-      selectedCells.forEach(cell => {
-        cell.classList.remove('selected');
-        if (!cell.classList.contains('found')) {
-          cell.style.background = '#f8f9fa';
-          cell.style.color = 'inherit';
-        }
-      });
-      selectedCells = [];
-      isSelecting = false;
-    }
-  });
+  // --- LIMPAR SELEÇÃO AO TOCAR FORA ---
+  function clearSelection() {
+    selectedCells.forEach(cell => {
+      cell.classList.remove('selected');
+      if (!cell.classList.contains('found')) {
+        cell.style.background = '#f8f9fa';
+        cell.style.color = 'inherit';
+      }
+    });
+    selectedCells = [];
+    isSelecting = false;
+  }
+
+  // --- EVENTOS DE SELEÇÃO ---
+
+  if (window.navigator.maxTouchPoints > 0) {
+    gridEl.addEventListener('touchstart', startSelection);
+    gridEl.addEventListener('touchmove', continueSelection);
+    document.addEventListener('touchend', endSelection);
+    document.addEventListener('touchstart', (ev) => {
+      if (!ev.target.closest('.wordgrid')) clearSelection();
+    });
+
+  } else {
+    gridEl.addEventListener('mousedown', startSelection);
+    gridEl.addEventListener('mouseover', continueSelection);
+    document.addEventListener('mouseup', endSelection);
+    document.addEventListener('mousedown', (ev) => {
+      if (!ev.target.closest('.wordgrid')) clearSelection();
+    });
+  }
 
   const style = document.createElement('style');
   style.textContent = `
