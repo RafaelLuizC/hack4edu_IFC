@@ -1,29 +1,9 @@
-#sequence img {
-    width: 18px;
-    height: auto;
-    filter: brightness(0) saturate(100%) invert(100%) sepia(1%) saturate(7498%) hue-rotate(119deg) brightness(112%) contrast(101%);
-}
-
-#sequence {
-  flex-direction: column;
-  gap: 2px;
-}
-
-.sequence-title {
-    font-size: 12px;
-}
-
-.sequence-content {
+#lessons {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 4px;
-}
-
-.sequence-value {
-    font-size: 18px;
-    min-width: 18px;
-    font-weight: 400;
+    gap: 12px;
 }
 
 /* ---------- */
@@ -31,33 +11,55 @@
 /* ---------- */
 
 .subject-box {
-    padding: 12px 12px 48px;
-    background-color: #2196F3;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 16px;
+    width: 100%;
+    padding: 12px 16px;
     border-radius: var(--border-radius);
-    box-shadow: 0px -2px 12px 2px rgba(77,77,77,0.15);
-    -webkit-box-shadow: 0px -2px 12px 2px rgba(77,77,77,0.15);
-    -moz-box-shadow: 0px -2px 12px 2px rgba(77,77,77,0.15);
-}
-
-.subject-box:nth-child(3n + 2) {
-    background-color: #64B5F6;
-}
-
-.subject-box:nth-child(3n + 3) {
-    background-color: #BBDEFB;
-}
-
-.subject-box:not(:first-child) {
-    margin-top: -36px;
+    background: var(--primary-color);
+    box-shadow: 0px 4px 20px rgba(238, 238, 238, 0.25);
+    color: var(--light-color);
 }
 
 .subject-box h2 {
-    font-size: 18px;
+    font-weight: 600;
+    font-size: 22px;
+    line-height: 128%;
     margin: 0;
 }
 
 .subject-box p {
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 128%;
     margin: 0;
+}
+
+.subject-box__teacher {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+}
+
+.subject-box__teacher p {
+    font-size: 14px;
+    line-height: 148%;
+}
+
+.subject-box__teacher p span {
+    font-weight: 500;
+}
+
+.teacher__profile-image {
+    width: 26px;
+    height: 26px;
+    object-fit: cover;
+    border-radius: 50%;
+    /* border: 2px solid var(--light-color); */
 }
 
 .subject-section__title {
@@ -67,4 +69,3 @@
 .subject-section__topics {
     font-size: 14px;
 }
-

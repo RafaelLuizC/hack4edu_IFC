@@ -31,7 +31,7 @@ async function renderIndex(){
   ordem.forEach(materia => {
     const box = el('section','subject-box');
     box.append(el('h2',null,materia));
-    const sub = el('div','subject-list');
+    const subjectDescription = el('div','subject-description');
     let topics = [];
 
     grupos[materia].forEach(item => {
@@ -40,7 +40,6 @@ async function renderIndex(){
       }
     });
 
-    const section = el('p','subject-section__title','Seção 1');
     let topicText = 'Exercícios de ';
 
     for (let topicIndex in topics) {
@@ -55,15 +54,26 @@ async function renderIndex(){
     }
     
     const topicElement = el('p','subject-section__topics',topicText);
-    box.append(section);
-    box.append(topicElement);
+    const unit = el('p',null,'Unidade 2');
+    const teacher = el('div','subject-box__teacher');
+    const img  = el('img','teacher__profile-image');
+    img.src = '/static/img/samples/foto-de-peril.png';
+    const teacherContent = el('p',null,'Conteúdo de ');
+    const teacherName = el('span',null,'Prof. Fulano Ciclano');
+    teacherContent.append(teacherName);
+    teacher.append(img);
+    teacher.append(teacherContent);
     
     const startBtn = el('button','start-btn btn','Iniciar trilha');
     startBtn.onclick = () => { 
       const first = grupos[materia][0];
-      if(first) location.href = '/activity/' + first.Codigo;
-    };
-    box.append(sub, startBtn);
+      if (first) {
+        location.href = '/activity/' + first.Codigo;
+      }
+    }
+
+    subjectDescription.append(topicElement, unit)
+    box.append(subjectDescription, teacher, startBtn);
     container.append(box);
   });
 }
@@ -104,7 +114,12 @@ async function renderActivityPage(codigo){
 
   // UI base
   container.innerHTML = '';
-  const title = el('h1',null, 'Responda a questão:');
+  const title = el('h1',null);
+  const titleIcon  = el('img',null);
+  const titleText = 'Responda a questão:';
+  titleIcon.src = '/static/img/icones/licao.svg';
+  title.append(titleIcon,titleText);
+
   container.append(title);
 
   const activityBox = el('div','activity-box');
@@ -115,7 +130,6 @@ async function renderActivityPage(codigo){
   continueBtn.style.opacity = '0.5';
 
   continueBtn.onclick = ()=> {
-    // marcar concluído e navegar ou finalizar
     state.completed = (state.completed || 0) + 1;
     sessionStorage.setItem(stateKey, JSON.stringify(state));
     if(index < grupo.length - 1){
@@ -142,16 +156,31 @@ async function renderActivityPage(codigo){
   // Render específico por tipo
   if (current.Atividade === 'Flashcard') {
     const card = el('div','flashcard');
-    const faceFront = document.createElement('div');
-    faceFront.className='card-face front';
-    faceFront.innerHTML = `<strong>${current.Detalhes.Flashcard.Frente}</strong>`;
-    const faceBack = document.createElement('div');
-    faceBack.className='card-face back-face';
-    faceBack.innerHTML = `<div>${current.Detalhes.Flashcard.Verso}</div>`;
-    card.append(faceFront, faceBack);
-    const btn = el('button','flip-btn btn','Girar');
 
-    btn.onclick = () => {
+    const flipIcon  = el('img',null);
+    flipIcon.src = '/static/img/icones/virar-flashcard.svg';
+
+    const buttonText = 'Clique para girar';
+
+    const faceFront = el('div','card-face front');
+    const question = el('p',null,current.Detalhes.Flashcard.Frente);
+    const btnFront = el('button','flip-btn');
+    btnFront.append(flipIcon.cloneNode(true), buttonText);
+
+    btnFront.onclick = () => {
+      card.classList.toggle('flipped');
+
+      if (card.classList.contains('flipped')) {
+        enableContinue();
+      }
+    }
+    
+    const faceBack = el('div','card-face back-face');
+    const answer = el('p',null,current.Detalhes.Flashcard.Verso);
+    const btnBack = el('button','flip-btn');
+    btnBack.append(flipIcon.cloneNode(true), buttonText);
+
+    btnBack.onclick = () => {
       card.classList.toggle('flipped');
 
       if (card.classList.contains('flipped')) {
@@ -159,7 +188,10 @@ async function renderActivityPage(codigo){
       }
     }
 
-    activityBox.append(card, btn);
+    faceFront.append(question, btnFront);
+    faceBack.append(answer, btnBack);
+    card.append(faceFront, faceBack);
+    activityBox.append(card);
     return;
   }
 

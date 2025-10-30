@@ -21,7 +21,7 @@ body:has(#activity-container)  .topbar nav button, body:has(#activity-container)
 }
 
 body:has(#activity-container) {
-  background: var(--blue-color-1);
+  background: var(--bg-color);
 }
 
 body:has(#activity-container) .nav-button {
@@ -102,25 +102,15 @@ body:has(#activity-container) .nav-button svg {
 /* Flashcard */
 /* --------- */
 
-body:has(#activity-container .flashcard) {
-  background: var(--primary-color);
-}
-
-body:has(#activity-container .flashcard)  .topbar nav button, body:has(#activity-container .flashcard)  .topbar nav a {
-  color: var(--light-color);
-}
-
-body:has(.flashcard) h1 {
-  color: var(--light-color);
-}
-
 body:has(.flashcard) .activity-box {
   position: relative;
+  display: flex;
+  justify-content: center;
 }
 
 .flashcard {
-  width: 100%;
-  height: 260px;
+  width: 300px;
+  height: 350px;
   position: relative;
 }
 
@@ -130,20 +120,22 @@ body:has(.flashcard) .activity-box {
   transition: transform .6s;
   height: 100%;
   display:flex;
+  flex-direction: column;
   align-items:center;
-  justify-content:center;
-  padding:20px;
-  background-color: var(--light-color);
+  justify-content:space-between;
+  padding: 48px 24px 18px;
   border-radius: 14px;
   text-align: center;
 }
 
 .front {
   transform: rotateY(0deg);
+  background: var(--primary-color-light);
 }
 
 .back-face {
   transform: rotateY(180deg);
+  background: var(--gradient);
 }
 
 .flipped .front {
@@ -155,16 +147,39 @@ body:has(.flashcard) .activity-box {
 }
 
 .flip-btn {
-  position: absolute;
-  bottom: -12px;
-  left: 50%;
-  transform: translateX(-50%) translateY(100%);
-  background: var(--light-color);
-  color: var(--primary-color);
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
   border: none;
   padding: 8px 16px;
   border-radius: 24px;
+  font-weight: 600;
   cursor: pointer;
+}
+
+.flip-btn img {
+  height: 16px;
+}
+
+.front .flip-btn {
+  color: var(--primary-color);
+}
+
+.front .flip-btn img {
+  filter: brightness(0) saturate(100%) invert(66%) sepia(48%) saturate(7298%) hue-rotate(167deg) brightness(98%) contrast(84%);
+
+}
+
+.back-face .flip-btn {
+  color: var(--light-color);
+}
+
+.back-face .flip-btn img {
+  filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(2224%) hue-rotate(32deg) brightness(120%) contrast(104%);
 }
 
 /* ----- */
@@ -270,15 +285,11 @@ body:has(.quiz-opts) .continue-btn.disabled {
 
 .feedback {
   margin-top:12px;
-  font-weight:600
+  font-weight:600;
 }
 
 @media (max-width: 600px) {
   .card {
-    padding:12px
-  }
-
-  .flashcard {
-    height:220px
+    padding:12px;
   }
 }
