@@ -1,6 +1,6 @@
 # Catarina — Microaprendizaje supervisado con metodologías activas e IA
 
-<img width="100%" height="auto" alt="Dibujo de Catarina y al lado el título del proyecto: Microaprendizaje supervisado con metodologías activas e IA" src="/images/banner.png" />
+![Banner](/images/banner.png)
 
 Descripción
 ---------
