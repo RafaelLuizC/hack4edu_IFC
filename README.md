@@ -42,9 +42,8 @@ Configurar variáveis de ambiente
 --------------------------------
 O pipeline utiliza modelos de IA via cloud (chave em `.env`). Crie um arquivo `.env` na raiz com a chave necessária, por exemplo:
 ```
-CLOUD_API_KEY=suachaveaqui
+CLOUD_API_KEY= suachave
 ```
-(Altere o nome da variável conforme o provider usado no código.)
 
 Uso
 ---
