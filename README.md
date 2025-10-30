@@ -1,76 +1,72 @@
-# Catarina — Microaprendizagem supervisionada com metodologias ativas e IA
+# Catarina — Microaprendizaje supervisado con metodologías activas e IA
 
-<img width="100%" height="auto" alt="Desenho da Catarina e ao lado o título do projeto: Microaprendizagem supervisionada com metodologias ativas e IA" src="/images/banner.png" />
+<img width="100%" height="auto" alt="Dibujo de Catarina y al lado el título del proyecto: Microaprendizaje supervisado con metodologías activas e IA" src="/images/banner.png" />
 
-Descrição
+Descripción
 ---------
-Sistema que gera atividades automaticamente (pipeline em `main.py`) e expõe/visualiza os dados via um aplicativo Flask (`app.py`). Para execução local sem banco real há uma amostra em `data/` (JSON).
+Sistema que genera actividades automáticamente (pipeline en `main.py`) y expone/visualiza los datos mediante una aplicación Flask (`app.py`). Para ejecución local sin una base de datos real hay una muestra en `data/` (JSON).
 
-Pré-requisitos
---------------
+Requisitos previos
+------------------
 - Python 3.10+
-- pip (ou pipenv/poetry)
-- Recomenda-se usar um ambiente virtual (venv)
+- pip (o pipenv/poetry)
+- Se recomienda usar un entorno virtual (venv)
 
-Instalação
+Instalación
 ---------
-1. Clone o repositório:
+1. Clonar el repositorio:
 ```bash
 git clone https://github.com/RafaelLuizC/hack4edu_IFC
 cd hack4edu_IFC
 ```
 
-2. Crie e ative um venv (Windows):
+2. Crear y activar un venv (Windows):
 ```powershell
 python -m venv .venv
 .venv\Scripts\Activate.ps1    # PowerShell
-# ou
+# o
 .venv\Scripts\activate.bat    # CMD
 ```
 
-3. Instale dependências:
-- Se houver `requirements.txt`:
+3. Instalar dependencias:
+- Si existe `requirements.txt`:
 ```bash
 pip install -r requirements.txt
 ```
-- Caso não exista, instale ao menos:
+- Si no existe, instalar al menos:
 ```bash
 pip install flask python-dotenv
 ```
 
-Configurar variáveis de ambiente
+Configurar variables de entorno
 --------------------------------
-O pipeline utiliza modelos de IA via cloud (chave em `.env`). Crie um arquivo `.env` na raiz com a chave necessária, por exemplo:
+El pipeline utiliza modelos de IA en la nube (clave en `.env`). Cree un archivo `.env` en la raíz con la clave necesaria, por ejemplo:
 ```
-CLOUD_API_KEY= suachave
+CLOUD_API_KEY=tu_clave_aqui
 ```
 
 Uso
 ---
-- Rodar o pipeline de geração:
+- Ejecutar el pipeline de generación:
 ```bash
 python main.py
 ```
-Edite `main.py` para informar o caminho/URL do PDF a ser processado, conforme comentário no arquivo.
+Edite `main.py` para indicar la ruta/URL del PDF a procesar, según el comentario en el archivo.
 
-- Rodar o servidor Flask:
+- Ejecutar el servidor Flask:
 ```bash
 python app.py
 ```
-Acesse no navegador:
+Acceder en el navegador:
 ```
 http://localhost:5000
 ```
 
-Banco de dados
+Base de datos (muestra)
 ------------------------
-O repositório contém uma amostra de dados em `data/` usada para execução sem banco real. Para usar um banco real, descomente as linhas 2, 21 e 22 em `app.py` (conforme comentário no arquivo) — confirme se essas linhas ainda correspondem às configurações de banco ao editar.
+El repositorio contiene una muestra de datos en `data/` para ejecución sin una base de datos real. Para usar una base de datos real, descomente las líneas 2, 21 y 22 en `app.py` (según el comentario en ese archivo) — confirme que esas líneas sigan correspondiendo a la configuración de la base de datos al editar.
 
-Dicas e solução de problemas
+Consejos y solución de problemas
 ---------------------------
-- Se usar `.env`, garanta que `python-dotenv` esteja instalado (o app deve carregar as variáveis automaticamente).
-- Se o Flask não iniciar, verifique permissões da porta 5000 e mensagens no terminal.
-
-Licença
--------
-Ver arquivo LICENSE (se houver).
+- Si usa `.env`, asegúrese de que `python-dotenv` esté instalado (la app debería cargar las variables automáticamente).
+- Si Flask no se inicia, verifique permisos del puerto 5000 y los mensajes en el terminal.
