@@ -1,66 +1,77 @@
+# Catarina — Microaprendizagem supervisionada com metodologias ativas e IA
+
 <img width="100%" height="auto" alt="Desenho da Catarina e ao lado o título do projeto: Microaprendizagem supervisionada com metodologias ativas e IA" src="/images/banner.png" />
 
+Descrição
+---------
+Sistema que gera atividades automaticamente (pipeline em `main.py`) e expõe/visualiza os dados via um aplicativo Flask (`app.py`). Para execução local sem banco real há uma amostra em `data/` (JSON).
 
-**Project Name: 
-Microaprendizaje supervisado con metodologías activas e IA - Project**
+Pré-requisitos
+--------------
+- Python 3.10+
+- pip (ou pipenv/poetry)
+- Recomenda-se usar um ambiente virtual (venv)
 
-**Description:**
+Instalação
+---------
+1. Clone o repositório:
+```bash
+git clone https://github.com/RafaelLuizC/hack4edu_IFC
+cd hack4edu_IFC
+```
 
-This project builds an AI-powered microlearning ...
+2. Crie e ative um venv (Windows):
+```powershell
+python -m venv .venv
+.venv\Scripts\Activate.ps1    # PowerShell
+# ou
+.venv\Scripts\activate.bat    # CMD
+```
 
-**Prerequisites:**
+3. Instale dependências:
+- Se houver `requirements.txt`:
+```bash
+pip install -r requirements.txt
+```
+- Caso não exista, instale ao menos:
+```bash
+pip install flask python-dotenv
+```
 
-- Python 3.x ([https://www.python.org/downloads/](https://www.python.org/downloads/))
-- Node.js and npm (or yarn) ([https://nodejs.org/](https://nodejs.org/))
-- Git version control ([https://git-scm.com/](https://git-scm.com/))
+Configurar variáveis de ambiente
+--------------------------------
+O pipeline utiliza modelos de IA via cloud (chave em `.env`). Crie um arquivo `.env` na raiz com a chave necessária, por exemplo:
+```
+CLOUD_API_KEY=suachaveaqui
+```
+(Altere o nome da variável conforme o provider usado no código.)
 
-**Installation:**
+Uso
+---
+- Rodar o pipeline de geração:
+```bash
+python main.py
+```
+Edite `main.py` para informar o caminho/URL do PDF a ser processado, conforme comentário no arquivo.
 
-1. **Clone the repository:**
+- Rodar o servidor Flask:
+```bash
+python app.py
+```
+Acesse no navegador:
+```
+http://localhost:5000
+```
 
-   ```bash
-   git clone https://github.com/Roshk01/Microlearning.git
-   ```
+Banco de dados
+------------------------
+O repositório contém uma amostra de dados em `data/` usada para execução sem banco real. Para usar um banco real, descomente as linhas 2, 21 e 22 em `app.py` (conforme comentário no arquivo) — confirme se essas linhas ainda correspondem às configurações de banco ao editar.
 
-2. **Navigate to the project directory:**
+Dicas e solução de problemas
+---------------------------
+- Se usar `.env`, garanta que `python-dotenv` esteja instalado (o app deve carregar as variáveis automaticamente).
+- Se o Flask não iniciar, verifique permissões da porta 5000 e mensagens no terminal.
 
-   ```bash
-   cd micro_fastapi
-   ```
-
-3. **Create a virtual environment (recommended):**
-
-   ```bash
-   python -m venv venv
-   source .venv/bin/activate  # Linux/macOS
-   .venv\Scripts\activate  # Windows
-   ```
-
-4. **Install backend dependencies:**
-
-   ```bash
-   pip install fastapi uvicorn[standard] transformers[all]  # Additional dependencies for Hugging Face models
-   ```
-
-5. **Install frontend dependencies (assuming a React frontend):**
-
-   ```bash
-   cd ui-master  # Navigate to your frontend directory
-   npm install  # or yarn install
-   ```
-
-**Running the Project:**
-
-**1. Backend (API):**
-
-   - **Start the development server:**
-
-     ```bash
-     uvicorn app:app --reload  # Adjust "app:app" if your app module is named differently
-     ```
-
-   - **Access the API:**
-
-     Open http://localhost:8000/docs in your web browser to explore the API documentation (OpenAPI/Swagger).
-
-
+Licença
+-------
+Ver arquivo LICENSE (se houver).
